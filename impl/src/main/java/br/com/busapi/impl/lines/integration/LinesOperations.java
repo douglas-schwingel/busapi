@@ -1,18 +1,20 @@
 package br.com.busapi.impl.lines.integration;
 
+import br.com.busapi.impl.exception.ApiException;
+import br.com.busapi.impl.exception.errors.StandartError;
+import br.com.busapi.impl.exception.issues.Issue;
 import br.com.busapi.impl.lines.models.Coordinate;
 import br.com.busapi.impl.lines.models.Line;
-import br.com.busapi.impl.lines.repository.LinesRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.Semaphore;
 
 @Service
 @Slf4j
@@ -31,30 +33,11 @@ public class LinesOperations {
     }
 
 
-    public List<Line> populateLinesWithCoordinates(RestTemplate template, LinesRepository repository, List<Line> lines) {
-        Semaphore semaphore = new Semaphore(5);
-        lines.forEach(l -> {
-            try {
-                semaphore.acquire();
-                populate(template, repository, l);
-                semaphore.release();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        });
-        return lines;
-    }
-
-    private void populate(RestTemplate template, LinesRepository repository, Line l) throws InterruptedException {
-        Thread.sleep(400);
-        new Thread(() -> {
-            Map<Integer, Coordinate> lineCoordinates = listBusLineCoordinates(l.getId(), template);
-            List<Double[]> coordinates = new ArrayList<>();
-            lineCoordinates.forEach((i, c) -> coordinates.add(new Double[]{c.getLat(), c.getLng()}));
-            l.setCoordinates(coordinates);
-            log.info(l.toString());
-            repository.save(l);
-        }, "PopulatingCoordinatesFor - " + l.getId()).start();
+    public void populateLinesWithCoordinates(RestTemplate template, Line line){
+        Map<Integer, Coordinate> lineCoordinates = listBusLineCoordinates(line.getId(), template);
+        List<Double[]> coordinates = new ArrayList<>();
+        lineCoordinates.forEach((i, c) -> coordinates.add(new Double[]{c.getLat(), c.getLng()}));
+        line.setCoordinates(coordinates);
     }
 
     private Map<Integer, Coordinate> listBusLineCoordinates(Integer id, RestTemplate template) {
@@ -66,10 +49,17 @@ public class LinesOperations {
                         template.getForObject(URI + "?a=il&p=" + id, String.class)));
                 return new ObjectMapper()
                         .readValue(parsedString, new TypeReference<Map<Integer, Coordinate>>() {
-                });
+                        });
             } catch (RestClientException e) {
                 count++;
-                if (count == maxRetry) throw new RuntimeException(id.toString());
+                if (count == maxRetry) throw new ApiException(StandartError.builder()
+                        .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                        .message("Internal error during request for DataPOA")
+                        .name(HttpStatus.INTERNAL_SERVER_ERROR.name())
+                        .issue(new Issue(e))
+                        .suggestedApplicationAction("Contact us: not_existing@goodluck.com")
+                        .suggestedUserAction("Contact the developers")
+                        .build());
             } catch (IOException e) {
                 log.error("Error trying to read value from {}", id);
             }
