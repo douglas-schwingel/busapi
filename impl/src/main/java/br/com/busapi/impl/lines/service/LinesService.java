@@ -3,6 +3,8 @@ package br.com.busapi.impl.lines.service;
 import br.com.busapi.impl.lines.integration.LinesOperations;
 import br.com.busapi.impl.lines.models.Line;
 import br.com.busapi.impl.lines.repository.LinesRepository;
+import org.springframework.data.geo.Distance;
+import org.springframework.data.geo.Point;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -24,5 +26,9 @@ public class LinesService {
 
     public List<Line> saveAll(List<Line> allLines, LinesOperations operations) {
         return operations.populateLinesWithCoordinates(new RestTemplate(), repository, allLines);
+    }
+
+    public List<Line> findNear(Point point, Distance dist) {
+        return repository.findLinesByCoordinatesNear(point, dist);
     }
 }

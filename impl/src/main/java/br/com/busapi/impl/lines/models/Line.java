@@ -4,9 +4,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Map;
+import java.util.List;
 
+@Document
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,6 +20,7 @@ public class Line {
     private String code;
     @JsonProperty("nome")
     private String name;
-    private Map<Integer, Coordinate> itinerary;
+    @GeoSpatialIndexed
+    private List<Double[]> coordinates;
 
 }

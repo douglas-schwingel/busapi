@@ -18,15 +18,13 @@ import java.util.concurrent.Semaphore;
 @Slf4j
 public class LinesOperations {
 
+    private static final String URI = "http://www.poatransporte.com.br/php/facades/process.php";
+
     public List<Line> listBusLines(RestTemplate template) {
-        log.info("Entered list all buses");
-        String linesString = template
-                .getForObject("http://www.poatransporte.com.br/php/facades/process.php?a=nc&p=%&t=o", String.class);
+        String linesString = template.getForObject(URI + "?a=nc&p=%&t=o", String.class);
         try {
-            Line[] linesArray = new ObjectMapper().readValue(linesString, Line[].class);
-            return Arrays.asList(linesArray);
+            return Arrays.asList(new ObjectMapper().readValue(linesString, Line[].class));
         } catch (IOException e) {
-            log.error("Exception {}", e.getMessage());
             log.trace("{0}", e);
         }
         return Collections.emptyList();
@@ -51,7 +49,9 @@ public class LinesOperations {
         Thread.sleep(400);
         new Thread(() -> {
             Map<Integer, Coordinate> lineCoordinates = listBusLineCoordinates(l.getId(), template);
-            l.setItinerary(lineCoordinates);
+            List<Double[]> coordinates = new ArrayList<>();
+            lineCoordinates.forEach((i, c) -> coordinates.add(new Double[]{c.getLat(), c.getLng()}));
+            l.setCoordinates(coordinates);
             log.info(l.toString());
             repository.save(l);
         }, "PopulatingCoordinatesFor - " + l.getId()).start();
@@ -61,15 +61,13 @@ public class LinesOperations {
         int count = 0;
         int maxRetry = 9;
         while (true) {
-            String lineString = null;
             try {
-                lineString = template
-                        .getForObject("http://www.poatransporte.com.br/php/facades/process.php?a=il&p=" + id, String.class);
-                String s = parseToString(lineString);
-                return new ObjectMapper().readValue(s, new TypeReference<Map<Integer, Coordinate>>() {
+                String parsedString = parseToStringWithoutIdAndCode(Objects.requireNonNull(
+                        template.getForObject(URI + "?a=il&p=" + id, String.class)));
+                return new ObjectMapper()
+                        .readValue(parsedString, new TypeReference<Map<Integer, Coordinate>>() {
                 });
             } catch (RestClientException e) {
-                log.error(e.getMessage());
                 count++;
                 if (count == maxRetry) throw new RuntimeException(id.toString());
             } catch (IOException e) {
@@ -78,7 +76,7 @@ public class LinesOperations {
         }
     }
 
-    private String parseToString(String lineString) {
+    private String parseToStringWithoutIdAndCode(String lineString) {
         String[] split = lineString.split(",");
         StringBuilder builder = new StringBuilder();
         builder.append("{");

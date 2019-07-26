@@ -1,9 +1,12 @@
 package br.com.busapi.contract.v1.lines.facade;
 
 import br.com.busapi.contract.v1.lines.mapper.LinesMapper;
+import br.com.busapi.contract.v1.lines.models.response.ListBusItineraryResponse;
 import br.com.busapi.contract.v1.lines.models.response.ListBusLinesResponse;
 import br.com.busapi.impl.lines.facade.LinesFacadeImpl;
 import br.com.busapi.impl.lines.models.Line;
+import org.springframework.data.geo.Distance;
+import org.springframework.data.geo.Point;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,8 +22,13 @@ public class LinesControllerFacade {
         this.mapper = mapper;
     }
 
-    public ListBusLinesResponse listAllBusLines() {
-        List<Line> lines = facadeImpl.listAllBusLines();
+    public ListBusLinesResponse saveAll() {
+        List<Line> lines = facadeImpl.saveAll();
+        return mapper.mapToListBusLinesResponse(lines);
+    }
+
+    public ListBusLinesResponse findNear(Point point, Distance dist) {
+        List<Line> lines = facadeImpl.findNear(point, dist);
         return mapper.mapToListBusLinesResponse(lines);
     }
 }
