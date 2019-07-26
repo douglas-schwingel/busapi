@@ -1,4 +1,3 @@
 rootProject.name = 'busapi'
 include 'contract'
 include 'impl'
-
