@@ -11,7 +11,6 @@ import java.util.List;
 @Repository
 public interface LinesRepository extends MongoRepository<Line, String> {
 
-    List<Line> findLinesByCoordinatesNear(Point point, Distance distance);
-
-    Line findByName(String name);
+    List<Line> findAllByCoordinatesNear(Point point, Distance distance);
+    List<Line> findAllByNameContains(String name);
 }

@@ -5,6 +5,8 @@ import br.com.busapi.contract.v1.lines.models.response.BusLineResponse;
 import br.com.busapi.contract.v1.lines.models.response.ListBusLinesResponse;
 import br.com.busapi.impl.lines.facade.LinesFacadeImpl;
 import br.com.busapi.impl.lines.models.Line;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.geo.Distance;
 import org.springframework.data.geo.Point;
 import org.springframework.stereotype.Service;
@@ -32,7 +34,11 @@ public class LinesControllerFacade {
         return mapper.mapToListBusLinesResponse(lines);
     }
 
-    public BusLineResponse findByName(String name) {
-        return mapper.mapToBusLineResponse(facadeImpl.findByName(name));
+    public ListBusLinesResponse findByName(String name) {
+        return mapper.mapToListBusLinesResponse(facadeImpl.findByName(name));
+    }
+
+    public Page<BusLineResponse> findAll(Pageable pageable) {
+        return facadeImpl.findAll(pageable).map(mapper::mapToBusLineResponse);
     }
 }

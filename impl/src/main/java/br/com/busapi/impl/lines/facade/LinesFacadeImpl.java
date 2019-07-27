@@ -5,6 +5,8 @@ import br.com.busapi.impl.lines.models.Line;
 import br.com.busapi.impl.lines.service.LinesService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.geo.Distance;
 import org.springframework.data.geo.Point;
 import org.springframework.stereotype.Service;
@@ -33,7 +35,11 @@ public class LinesFacadeImpl {
         return service.findNear(point, dist);
     }
 
-    public Line findByName(String name) {
+    public List<Line> findByName(String name) {
         return service.findByName(name);
+    }
+
+    public Page<Line> findAll(Pageable pageable) {
+        return service.findAll(pageable);
     }
 }
