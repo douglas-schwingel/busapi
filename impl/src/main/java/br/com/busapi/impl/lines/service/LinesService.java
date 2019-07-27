@@ -49,4 +49,8 @@ public class LinesService {
     public List<Line> findNear(Point point, Distance dist) {
         return repository.findLinesByCoordinatesNear(point, dist);
     }
+
+    public Line findByName(String name) {
+        return repository.findByName(name);
+    }
 }

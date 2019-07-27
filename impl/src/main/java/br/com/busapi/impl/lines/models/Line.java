@@ -2,6 +2,7 @@ package br.com.busapi.impl.lines.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
@@ -11,6 +12,7 @@ import java.util.List;
 
 @Document
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class Line {

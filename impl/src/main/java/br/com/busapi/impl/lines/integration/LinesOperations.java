@@ -22,10 +22,10 @@ public class LinesOperations {
 
     private static final String URI = "http://www.poatransporte.com.br/php/facades/process.php";
 
-    public List<Line> listBusLines(RestTemplate template) {
+    public List<Line> listBusLines(RestTemplate template, ObjectMapper mapper) {
         String linesString = template.getForObject(URI + "?a=nc&p=%&t=o", String.class);
         try {
-            return Arrays.asList(new ObjectMapper().readValue(linesString, Line[].class));
+            return Arrays.asList(mapper.readValue(linesString, Line[].class));
         } catch (IOException e) {
             log.trace("{0}", e);
         }

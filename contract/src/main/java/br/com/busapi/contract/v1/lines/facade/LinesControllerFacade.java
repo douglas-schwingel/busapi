@@ -1,7 +1,7 @@
 package br.com.busapi.contract.v1.lines.facade;
 
 import br.com.busapi.contract.v1.lines.mapper.LinesMapper;
-import br.com.busapi.contract.v1.lines.models.response.ListBusItineraryResponse;
+import br.com.busapi.contract.v1.lines.models.response.BusLineResponse;
 import br.com.busapi.contract.v1.lines.models.response.ListBusLinesResponse;
 import br.com.busapi.impl.lines.facade.LinesFacadeImpl;
 import br.com.busapi.impl.lines.models.Line;
@@ -30,5 +30,9 @@ public class LinesControllerFacade {
     public ListBusLinesResponse findNear(Point point, Distance dist) {
         List<Line> lines = facadeImpl.findNear(point, dist);
         return mapper.mapToListBusLinesResponse(lines);
+    }
+
+    public BusLineResponse findByName(String name) {
+        return mapper.mapToBusLineResponse(facadeImpl.findByName(name));
     }
 }
