@@ -41,4 +41,8 @@ public class LinesControllerFacade {
     public Page<BusLineResponse> findAll(Pageable pageable) {
         return facadeImpl.findAll(pageable).map(mapper::mapToBusLineResponse);
     }
+
+    public BusLineResponse saveOne(Line line) {
+        return mapper.mapToBusLineResponse(facadeImpl.saveOne(line));
+    }
 }

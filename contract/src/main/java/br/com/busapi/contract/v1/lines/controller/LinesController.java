@@ -86,8 +86,7 @@ public class LinesController {
 
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses({
-            @ApiResponse(code = 201, message = "Created", response = ListBusLinesResponse.class),
-            @ApiResponse(code = 204, message = "No content", response = ResponseError.class),
+            @ApiResponse(code = 200, message = "OK", response = ListBusLinesResponse.class),
             @ApiResponse(code = 403, message = "Method not Allowed", response = ResponseError.class),
             @ApiResponse(code = 404, message = "Not found", response = ResponseError.class),
             @ApiResponse(code = 500, message = "Internal server error", response = ResponseError.class)
@@ -98,4 +97,17 @@ public class LinesController {
         return controllerFacade.findByName(name);
     }
 
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "Created", response = BusLineResponse.class),
+            @ApiResponse(code = 403, message = "Method not Allowed", response = ResponseError.class),
+            @ApiResponse(code = 404, message = "Not found", response = ResponseError.class),
+            @ApiResponse(code = 500, message = "Internal server error", response = ResponseError.class)
+    })
+    @ApiOperation(value = "Save/Update bus line", notes = "Save new bus line or update if id already exists")
+    @PostMapping("/")
+    public BusLineResponse saveBusLine(@RequestBody Line line) {
+        return controllerFacade.saveOne(line);
+    }
 }

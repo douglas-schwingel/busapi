@@ -49,6 +49,34 @@ public class LinesService {
         return allLines;
     }
 
+    public List<Line> findNear(Point point, Distance dist) {
+        return repository.findAllByCoordinatesNear(point, dist);
+    }
+
+    public List<Line> findByNameContains(String name) {
+        return repository.findAllByNameContains(name.toUpperCase());
+    }
+
+    public Page<Line> findAll(Pageable pageable) {
+        return repository.findAll(pageable);
+    }
+
+    public Line saveOne(Line line) {
+        return repository.save(line);
+    }
+
+    public Line findById(Integer id) {
+        return repository.findById(id);
+    }
+
+    public Line update(Line line) {
+        Line saved = repository.findById(line.getId());
+        if (line.getName() != null) saved.setName(line.getName());
+        if (line.getCode() != null) saved.setCode(line.getCode());
+        if(line.getCoordinates() != null) saved.getCoordinates().addAll(line.getCoordinates());
+        return repository.save(saved);
+    }
+
     private String formatName(String name) {
         return name
                 .replace(" ", "_")
@@ -69,17 +97,5 @@ public class LinesService {
                 .replace("Ê", "E")
                 .replace("Á", "A")
                 .replace("É", "E").toUpperCase();
-    }
-
-    public List<Line> findNear(Point point, Distance dist) {
-        return repository.findAllByCoordinatesNear(point, dist);
-    }
-
-    public List<Line> findByName(String name) {
-        return repository.findAllByNameContains(name.toUpperCase());
-    }
-
-    public Page<Line> findAll(Pageable pageable) {
-        return repository.findAll(pageable);
     }
 }

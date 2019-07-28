@@ -1,8 +1,6 @@
 package br.com.busapi.contract.v1.lines.models.response;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.Singular;
+import lombok.*;
 
 import java.util.List;
 
