@@ -75,4 +75,8 @@ public class LinesFacadeImpl {
                 .suggestedUserAction(userAction)
                 .build());
     }
+
+    public Line findById(Integer id) {
+        return service.findById(id);
+    }
 }

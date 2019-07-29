@@ -1,6 +1,7 @@
 package br.com.busapi.contract.v1.lines.mapper;
 
 import br.com.busapi.contract.v1.lines.models.response.BusLineResponse;
+import br.com.busapi.contract.v1.lines.models.response.BusLinetinerary;
 import br.com.busapi.contract.v1.lines.models.response.ListBusLinesResponse;
 import br.com.busapi.impl.lines.models.Line;
 import org.springframework.stereotype.Service;
@@ -22,5 +23,14 @@ public class LinesMapper {
         var builder = ListBusLinesResponse.builder();
         lines.forEach(l -> builder.line(mapToBusLineResponse(l)));
         return builder.build();
+    }
+
+    public BusLinetinerary mapToBusLineItinerary(Line line) {
+        return BusLinetinerary.builder()
+                .name(line.getName())
+                .id(line.getId())
+                .code(line.getCode())
+                .coordinates(line.getCoordinates())
+                .build();
     }
 }

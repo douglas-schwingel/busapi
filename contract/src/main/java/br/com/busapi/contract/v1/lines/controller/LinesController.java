@@ -2,6 +2,7 @@ package br.com.busapi.contract.v1.lines.controller;
 
 import br.com.busapi.contract.v1.lines.facade.LinesControllerFacade;
 import br.com.busapi.contract.v1.lines.models.response.BusLineResponse;
+import br.com.busapi.contract.v1.lines.models.response.BusLinetinerary;
 import br.com.busapi.contract.v1.lines.models.response.ListBusLinesResponse;
 import br.com.busapi.impl.exception.errors.ResponseError;
 import br.com.busapi.impl.lines.models.Line;
@@ -110,4 +111,6 @@ public class LinesController {
     public BusLineResponse saveBusLine(@RequestBody Line line) {
         return controllerFacade.saveOne(line);
     }
+
+
 }

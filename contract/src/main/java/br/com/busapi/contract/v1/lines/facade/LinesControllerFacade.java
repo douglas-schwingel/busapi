@@ -2,6 +2,7 @@ package br.com.busapi.contract.v1.lines.facade;
 
 import br.com.busapi.contract.v1.lines.mapper.LinesMapper;
 import br.com.busapi.contract.v1.lines.models.response.BusLineResponse;
+import br.com.busapi.contract.v1.lines.models.response.BusLinetinerary;
 import br.com.busapi.contract.v1.lines.models.response.ListBusLinesResponse;
 import br.com.busapi.impl.lines.facade.LinesFacadeImpl;
 import br.com.busapi.impl.lines.models.Line;
@@ -44,5 +45,10 @@ public class LinesControllerFacade {
 
     public BusLineResponse saveOne(Line line) {
         return mapper.mapToBusLineResponse(facadeImpl.saveOne(line));
+    }
+
+    public BusLinetinerary getBusLineItinerary(Integer id) {
+        Line line = facadeImpl.findById(id);
+        return mapper.mapToBusLineItinerary(line);
     }
 }
