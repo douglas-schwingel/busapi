@@ -43,10 +43,10 @@ public class LineValidation {
         if (coordinates != null) {
             if (coordinates.isEmpty()) return false;
             coordinates.forEach(c -> {
-                if (c[1] > -51.087028
-                        || c[1] < -51.266828
+                if (c[0] > -29.954468
                         || c[0] < -30.261371
-                        || c[0] > -29.954468) {
+                        || c[1] > -51.087028
+                        || c[1] < -51.266828) {
                     throw new ApiException(StandartErrorImpl.builder()
                             .status(HttpStatus.BAD_REQUEST.value())
                             .name(HttpStatus.BAD_REQUEST.name())
