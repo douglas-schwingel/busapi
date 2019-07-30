@@ -6,7 +6,7 @@ import java.util.List;
 
 @Data
 @Builder
-public class ListBusLinesResponse {
+public class ListBusLineResponse {
 
     @Singular
     private List<BusLineResponse> lines;

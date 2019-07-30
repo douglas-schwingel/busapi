@@ -1,7 +1,8 @@
 package br.com.busapi.impl.lines.facade;
 
 import br.com.busapi.impl.exception.ApiException;
-import br.com.busapi.impl.exception.errors.StandartError;
+import br.com.busapi.impl.exception.errors.NoContentError;
+import br.com.busapi.impl.exception.errors.StandartErrorImpl;
 import br.com.busapi.impl.exception.issues.Issue;
 import br.com.busapi.impl.lines.integration.LinesOperations;
 import br.com.busapi.impl.lines.models.Line;
@@ -15,6 +16,7 @@ import org.springframework.data.geo.Distance;
 import org.springframework.data.geo.Point;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
@@ -35,7 +37,7 @@ public class LinesFacadeImpl {
 
     public List<Line> saveAll() {
         List<Line> allLines = operations.listBusLines(new RestTemplate(), new ObjectMapper());
-        return service.saveAll(allLines, operations);
+        return service.saveAll(allLines, operations, validation);
     }
 
     public List<Line> findNear(Point point, Distance dist) {
@@ -44,7 +46,7 @@ public class LinesFacadeImpl {
 
     public List<Line> findByName(String name) {
         if (validation.nameIsValid(name)) return service.findByNameContains(name);
-        throw apiException("Invalid name", "Name contains invalid data", "Verify form data",
+        throw invalidDataApiException("Invalid name: " + name, "Name contains invalid data", "Verify form data",
                 "Verify the passed name and try again");
     }
 
@@ -53,20 +55,47 @@ public class LinesFacadeImpl {
     }
 
     public Line saveOne(Line line) {
-        if (validation.isValid(line)) {
+        if (validation.isValidToSave(line)) {
             if (service.findById(line.getId()) == null) {
                 return service.saveOne(line);
             } else {
-                return service.update(line);
+                throw new ApiException(StandartErrorImpl.builder()
+                        .status(HttpStatus.METHOD_NOT_ALLOWED.value())
+                        .name(HttpStatus.METHOD_NOT_ALLOWED.name())
+                        .message("Uptades should be done with PATCH and not POST")
+                        .issue(new Issue(new HttpRequestMethodNotSupportedException("Method PATCH should" +
+                                " be used instead of POST")))
+                        .suggestedApplicationAction("Redirect to the PATCH endpoint")
+                        .suggestedUserAction("Contact the developer")
+                        .build());
             }
         }
-        throw apiException("Invalid line values", "Line contains invalid data",
+        throw invalidDataApiException("Invalid line values", "Line contains invalid data",
                 "User passed invalid data. Try verifying your form to make sure everything " +
                         "is all right.", "Verify the passed information and try again");
     }
 
-    private ApiException apiException(String exceptionMessage, String issueMessage, String appAction, String userAction) {
-        return new ApiException(StandartError.builder()
+    public Line findById(Integer id) {
+        Line line = service.findById(id);
+        if (line == null) {
+            throw new ApiException(NoContentError.builder()
+                    .message("Request was successful but there is no entries to return.")
+                    .name(HttpStatus.NO_CONTENT.name())
+                    .status((HttpStatus.NO_CONTENT.value()))
+                    .build());
+        }
+        return line;
+    }
+
+    public Line deleteLine(Integer id) {
+        Line lineToBeDeleted = service.findById(id);
+        if (service.deleteLine(lineToBeDeleted)) return lineToBeDeleted;
+        throw invalidDataApiException("No line with the id " + id, "Invalid line id",
+                "Contact us for more informations.", "Verify the id and try again.");
+    }
+
+    private ApiException invalidDataApiException(String exceptionMessage, String issueMessage, String appAction, String userAction) {
+        return new ApiException(StandartErrorImpl.builder()
                 .status(HttpStatus.BAD_REQUEST.value())
                 .message(exceptionMessage)
                 .name(HttpStatus.BAD_REQUEST.name())
@@ -76,7 +105,13 @@ public class LinesFacadeImpl {
                 .build());
     }
 
-    public Line findById(Integer id) {
-        return service.findById(id);
+    public Line updateLine(Line line) {
+//        TODO melhorar a exception quando falta um campo
+        if (validation.isValidToSave(line)) {
+            Line validatedLine = validation.validateFieldsToUpdate(line, findById(line.getId()));
+            return service.saveOne(validatedLine);
+        }
+        throw invalidDataApiException("No line with the id " + line.getId(), "Invalid line id",
+                "Contact us for more informations.", "Verify the id and try again.");
     }
 }

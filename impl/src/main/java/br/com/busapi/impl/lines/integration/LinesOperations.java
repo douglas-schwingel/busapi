@@ -1,7 +1,7 @@
 package br.com.busapi.impl.lines.integration;
 
 import br.com.busapi.impl.exception.ApiException;
-import br.com.busapi.impl.exception.errors.StandartError;
+import br.com.busapi.impl.exception.errors.StandartErrorImpl;
 import br.com.busapi.impl.exception.issues.Issue;
 import br.com.busapi.impl.lines.models.Coordinate;
 import br.com.busapi.impl.lines.models.Line;
@@ -33,7 +33,7 @@ public class LinesOperations {
     }
 
 
-    public void populateLinesWithCoordinates(RestTemplate template, Line line){
+    public void populateLineWithCoordinates(RestTemplate template, Line line){
         Map<Integer, Coordinate> lineCoordinates = listBusLineCoordinates(line.getId(), template);
         List<Double[]> coordinates = new ArrayList<>();
         lineCoordinates.forEach((i, c) -> coordinates.add(new Double[]{c.getLat(), c.getLng()}));
@@ -52,7 +52,7 @@ public class LinesOperations {
                         });
             } catch (RestClientException e) {
                 count++;
-                if (count == maxRetry) throw new ApiException(StandartError.builder()
+                if (count == maxRetry) throw new ApiException(StandartErrorImpl.builder()
                         .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
                         .message("Internal error during request for DataPOA")
                         .name(HttpStatus.INTERNAL_SERVER_ERROR.name())

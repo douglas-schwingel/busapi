@@ -3,7 +3,7 @@ package br.com.busapi.contract.v1.lines.facade;
 import br.com.busapi.contract.v1.lines.mapper.LinesMapper;
 import br.com.busapi.contract.v1.lines.models.response.BusLineResponse;
 import br.com.busapi.contract.v1.lines.models.response.BusLinetinerary;
-import br.com.busapi.contract.v1.lines.models.response.ListBusLinesResponse;
+import br.com.busapi.contract.v1.lines.models.response.ListBusLineResponse;
 import br.com.busapi.impl.lines.facade.LinesFacadeImpl;
 import br.com.busapi.impl.lines.models.Line;
 import org.springframework.data.domain.Page;
@@ -25,17 +25,17 @@ public class LinesControllerFacade {
         this.mapper = mapper;
     }
 
-    public ListBusLinesResponse saveAll() {
+    public ListBusLineResponse saveAll() {
         List<Line> lines = facadeImpl.saveAll();
         return mapper.mapToListBusLinesResponse(lines);
     }
 
-    public ListBusLinesResponse findNear(Point point, Distance dist) {
+    public ListBusLineResponse findNear(Point point, Distance dist) {
         List<Line> lines = facadeImpl.findNear(point, dist);
         return mapper.mapToListBusLinesResponse(lines);
     }
 
-    public ListBusLinesResponse findByName(String name) {
+    public ListBusLineResponse findByName(String name) {
         return mapper.mapToListBusLinesResponse(facadeImpl.findByName(name));
     }
 
@@ -47,8 +47,15 @@ public class LinesControllerFacade {
         return mapper.mapToBusLineResponse(facadeImpl.saveOne(line));
     }
 
-    public BusLinetinerary getBusLineItinerary(Integer id) {
-        Line line = facadeImpl.findById(id);
-        return mapper.mapToBusLineItinerary(line);
+    public BusLinetinerary findById(Integer id) {
+        return mapper.mapToBusLineItinerary(facadeImpl.findById(id));
+    }
+
+    public void deleteLine(Integer id) {
+        facadeImpl.deleteLine(id);
+    }
+
+    public BusLineResponse updateBusLine(Line line) {
+        return mapper.mapToBusLineResponse(facadeImpl.updateLine(line));
     }
 }

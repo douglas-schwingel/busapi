@@ -61,7 +61,7 @@ public class LinesOperationsTest {
     public void shouldPopulateTheLinesCoordinates() {
         assertNull(lineTeste.getCoordinates());
 
-        operations.populateLinesWithCoordinates(new RestTemplate(), lineTeste);
+        operations.populateLineWithCoordinates(new RestTemplate(), lineTeste);
 
         assertNotNull(lineTeste.getCoordinates());
     }
@@ -72,7 +72,7 @@ public class LinesOperationsTest {
         exception.expectMessage("Internal error during request for DataPOA");
         doThrow(RestClientException.class).when(template).getForObject(anyString(), any());
 
-        operations.populateLinesWithCoordinates(template, lineTeste);
+        operations.populateLineWithCoordinates(template, lineTeste);
     }
 
 }
