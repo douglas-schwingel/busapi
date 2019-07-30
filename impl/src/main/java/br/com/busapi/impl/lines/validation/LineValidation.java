@@ -67,7 +67,7 @@ public class LineValidation {
 
     public boolean codeIsValid(String code) {
         if (code != null) {
-            return code.matches("[0-9-]{4,6}")
+            return code.matches("[A-Z0-9-]{2,7}")
                     && !code.isEmpty()
                     && !code.isBlank();
         } else {

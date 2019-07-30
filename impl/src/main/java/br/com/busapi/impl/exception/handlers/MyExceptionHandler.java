@@ -10,8 +10,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 @Slf4j
 @ControllerAdvice
@@ -44,6 +46,28 @@ public class MyExceptionHandler {
                 .language(PT_BR)
                 .error(error).build()
                 , HttpStatus.METHOD_NOT_ALLOWED);
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ResponseError> methodArgumentException(MethodArgumentTypeMismatchException exception,
+                                                                                HttpServletRequest request) {
+        Map<String, String[]> parameterMap = request.getParameterMap();
+        StringBuilder message = new StringBuilder();
+        parameterMap.forEach((k, v) -> message.append(String.format("Parameter: %.6s - Value: %.10s | ", k, v[0])));
+        StandartErrorImpl error = StandartErrorImpl.builder()
+                .name(HttpStatus.BAD_REQUEST.name())
+                .status(HttpStatus.BAD_REQUEST.value())
+                .message("Invalid parameters: " + message.toString())
+                .issue(new Issue(exception))
+                .suggestedUserAction("Contact the developer")
+                .suggestedApplicationAction("This method is not supported here. Contact us")
+                .build();
+        log.error(LOG_MESSAGE, error.getMessage(), exception);
+        return new ResponseEntity<>(ResponseError.builder()
+                .namespace(request.getRequestURI())
+                .language(PT_BR)
+                .error(error).build()
+                , HttpStatus.BAD_REQUEST);
     }
 
 

@@ -128,10 +128,10 @@ public class LinesController {
             @ApiResponse(code = 405, message = "Method not Allowed", response = ResponseError.class),
             @ApiResponse(code = 500, message = "Internal server error", response = ResponseError.class)
     })
-    @ApiOperation(value = "Save all buses from DataPOA")
+    @ApiOperation(value = "Find bus by code")
     @GetMapping("/code/{code}")
     public BusLinetinerary findByCode(@RequestParam
-                                      @ApiParam(example = "261-1") String code) {
+                                      @ApiParam(example = "264-1") String code) {
         return controllerFacade.findByCode(code);
     }
 
@@ -143,7 +143,7 @@ public class LinesController {
             @ApiResponse(code = 500, message = "Internal server error", response = ResponseError.class)
     })
     @ApiOperation(value = "Save bus line", notes = "Save new bus line")
-    @PostMapping("/")
+    @PostMapping
     public BusLineResponse saveBusLine(@RequestBody Line line) {
         return controllerFacade.saveOne(line);
     }
@@ -156,7 +156,7 @@ public class LinesController {
             @ApiResponse(code = 500, message = "Internal server error", response = ResponseError.class)
     })
     @ApiOperation(value = "Update bus line", notes = "Update a bus line")
-    @PutMapping("/")
+    @PutMapping
     public BusLineResponse updateBusLine(@RequestBody Line line) {
         return controllerFacade.updateBusLine(line);
     }

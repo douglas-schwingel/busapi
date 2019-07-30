@@ -116,7 +116,7 @@ public class LinesFacadeImpl {
 
     public Line findByCode(String code) {
         if (validation.codeIsValid(code)) return service.findByCode(code);
-        throw invalidDataApiException("Invalid code {}" + code, "The code " + code + " is not valid",
+        throw invalidDataApiException("Invalid code " + code, "The code " + code + " is not valid",
                 "Contect us for more informations.", "Verify the code and try again");
     }
 }

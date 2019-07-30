@@ -20,6 +20,10 @@ apply plugin: 'org.springframework.boot'
 
 dependencies {
 	implementation project(':contract')
+	implementation 'io.rest-assured:rest-assured:4.0.0'
+	implementation 'io.rest-assured:json-path:4.0.0'
+	implementation 'io.rest-assured:xml-path:4.0.0'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 

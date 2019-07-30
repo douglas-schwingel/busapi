@@ -2,10 +2,7 @@ package br.com.busapi.impl.lines.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -26,6 +23,7 @@ public class Line {
     @ApiModelProperty(example = "SANTA_MARIA")
     @JsonProperty("nome")
     private String name;
+    @Singular
     @JsonProperty("coordenadas")
     @GeoSpatialIndexed
     private List<Double[]> coordinates;
