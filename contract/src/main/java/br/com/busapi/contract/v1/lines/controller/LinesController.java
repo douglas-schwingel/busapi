@@ -35,8 +35,8 @@ public class LinesController {
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = Page.class),
             @ApiResponse(code = 400, message = "Bad Request", response = ResponseError.class),
-            @ApiResponse(code = 403, message = "Method not Allowed", response = ResponseError.class),
             @ApiResponse(code = 404, message = "Not found", response = ResponseError.class),
+            @ApiResponse(code = 405, message = "Method not Allowed", response = ResponseError.class),
             @ApiResponse(code = 500, message = "Internal server error", response = ResponseError.class)
     })
     @ApiOperation(value = "Get all buses", notes = "Find all bus lines")
@@ -57,8 +57,8 @@ public class LinesController {
             @ApiResponse(code = 200, message = "OK", response = BusLinetinerary.class),
             @ApiResponse(code = 204, message = "No Content", response = NoContentError.class),
             @ApiResponse(code = 400, message = "Bad Request", response = ResponseError.class),
-            @ApiResponse(code = 400, message = "Bad Request", response = ResponseError.class),
             @ApiResponse(code = 403, message = "Method not Allowed", response = ResponseError.class),
+            @ApiResponse(code = 405, message = "Method not Allowed", response = ResponseError.class),
             @ApiResponse(code = 500, message = "Internal server error", response = ResponseError.class)
     })
     @ApiOperation(value = "Get line by id", notes = "Find bus line by id")
@@ -72,7 +72,7 @@ public class LinesController {
     @ApiResponses({
             @ApiResponse(code = 204, message = "Delete successful - No content"),
             @ApiResponse(code = 400, message = "Bad Request", response = ResponseError.class),
-            @ApiResponse(code = 403, message = "Method not Allowed", response = ResponseError.class),
+            @ApiResponse(code = 405, message = "Method not Allowed", response = ResponseError.class),
             @ApiResponse(code = 500, message = "Internal server error", response = ResponseError.class)
     })
     @ApiOperation(value = "Delete bus line", notes = "Delete bus line by id")
@@ -87,8 +87,8 @@ public class LinesController {
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = ListBusLineResponse.class),
             @ApiResponse(code = 400, message = "Bad Request", response = ResponseError.class),
-            @ApiResponse(code = 403, message = "Method not Allowed", response = ResponseError.class),
             @ApiResponse(code = 404, message = "Not found", response = ResponseError.class),
+            @ApiResponse(code = 405, message = "Method not Allowed", response = ResponseError.class),
             @ApiResponse(code = 500, message = "Internal server error", response = ResponseError.class)
     })
     @ApiOperation(value = "Get all buses near", notes = "Find all bus lines within the informed distance (in kilometers)" +
@@ -124,8 +124,8 @@ public class LinesController {
     @ApiResponses({
             @ApiResponse(code = 201, message = "OK", response = BusLinetinerary.class),
             @ApiResponse(code = 400, message = "Bad Request", response = ResponseError.class),
-            @ApiResponse(code = 403, message = "Method not Allowed", response = ResponseError.class),
             @ApiResponse(code = 404, message = "Not found", response = ResponseError.class),
+            @ApiResponse(code = 405, message = "Method not Allowed", response = ResponseError.class),
             @ApiResponse(code = 500, message = "Internal server error", response = ResponseError.class)
     })
     @ApiOperation(value = "Save all buses from DataPOA")
@@ -139,10 +139,10 @@ public class LinesController {
     @ApiResponses({
             @ApiResponse(code = 201, message = "Created", response = BusLineResponse.class),
             @ApiResponse(code = 400, message = "Bad Request", response = ResponseError.class),
-            @ApiResponse(code = 403, message = "Method not Allowed", response = ResponseError.class),
+            @ApiResponse(code = 405, message = "Method not allowed", response = ResponseError.class),
             @ApiResponse(code = 500, message = "Internal server error", response = ResponseError.class)
     })
-    @ApiOperation(value = "Save/Update bus line", notes = "Save new bus line or update if id already exists")
+    @ApiOperation(value = "Save bus line", notes = "Save new bus line")
     @PostMapping("/")
     public BusLineResponse saveBusLine(@RequestBody Line line) {
         return controllerFacade.saveOne(line);
@@ -152,7 +152,7 @@ public class LinesController {
     @ApiResponses({
             @ApiResponse(code = 200, message = "Updated", response = BusLineResponse.class),
             @ApiResponse(code = 400, message = "Bad Request", response = ResponseError.class),
-            @ApiResponse(code = 403, message = "Method not Allowed", response = ResponseError.class),
+            @ApiResponse(code = 405, message = "Method not Allowed", response = ResponseError.class),
             @ApiResponse(code = 500, message = "Internal server error", response = ResponseError.class)
     })
     @ApiOperation(value = "Update bus line", notes = "Update a bus line")
@@ -165,8 +165,8 @@ public class LinesController {
     @ApiResponses({
             @ApiResponse(code = 201, message = "Created", response = ListBusLineResponse.class),
             @ApiResponse(code = 400, message = "Bad Request", response = ResponseError.class),
-            @ApiResponse(code = 403, message = "Method not Allowed", response = ResponseError.class),
             @ApiResponse(code = 404, message = "Not found", response = ResponseError.class),
+            @ApiResponse(code = 405, message = "Method not Allowed", response = ResponseError.class),
             @ApiResponse(code = 500, message = "Internal server error", response = ResponseError.class)
     })
     @ApiOperation(value = "Save all buses from DataPOA")

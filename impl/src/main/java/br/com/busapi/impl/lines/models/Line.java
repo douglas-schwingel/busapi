@@ -26,7 +26,7 @@ public class Line {
     @ApiModelProperty(example = "SANTA_MARIA")
     @JsonProperty("nome")
     private String name;
-
+    @JsonProperty("coordenadas")
     @GeoSpatialIndexed
     private List<Double[]> coordinates;
 

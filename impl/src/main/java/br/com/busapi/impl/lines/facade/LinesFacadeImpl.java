@@ -62,10 +62,10 @@ public class LinesFacadeImpl {
                 throw new ApiException(StandartErrorImpl.builder()
                         .status(HttpStatus.METHOD_NOT_ALLOWED.value())
                         .name(HttpStatus.METHOD_NOT_ALLOWED.name())
-                        .message("Uptades should be done with PATCH and not POST")
-                        .issue(new Issue(new HttpRequestMethodNotSupportedException("Method PATCH should" +
+                        .message("Uptades should be done with PUT and not POST")
+                        .issue(new Issue(new HttpRequestMethodNotSupportedException("Method PUT should" +
                                 " be used instead of POST")))
-                        .suggestedApplicationAction("Redirect to the PATCH endpoint")
+                        .suggestedApplicationAction("Redirect to the PUT endpoint")
                         .suggestedUserAction("Contact the developer")
                         .build());
             }
@@ -106,7 +106,6 @@ public class LinesFacadeImpl {
     }
 
     public Line updateLine(Line line) {
-//        TODO melhorar a exception quando falta um campo
         if (validation.isValidToSave(line)) {
             Line validatedLine = validation.validateFieldsToUpdate(line, findById(line.getId()));
             return service.saveOne(validatedLine);
