@@ -52,6 +52,11 @@ public class LinesOperations {
                         });
             } catch (RestClientException e) {
                 count++;
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
                 if (count == maxRetry) throw new ApiException(StandartErrorImpl.builder()
                         .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
                         .message("Internal error during request for DataPOA")

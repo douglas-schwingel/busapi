@@ -58,4 +58,8 @@ public class LinesControllerFacade {
     public BusLineResponse updateBusLine(Line line) {
         return mapper.mapToBusLineResponse(facadeImpl.updateLine(line));
     }
+
+    public BusLinetinerary findByCode(String code) {
+        return mapper.mapToBusLineItinerary(facadeImpl.findByCode(code));
+    }
 }

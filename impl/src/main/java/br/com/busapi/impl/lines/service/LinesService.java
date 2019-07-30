@@ -29,22 +29,16 @@ public class LinesService {
         this.repository = repository;
     }
 
+
     public List<Line> saveAll(List<Line> allLines, LinesOperations operations, LineValidation validation) {
-        Semaphore semaphore = new Semaphore(5);
+        Semaphore semaphore = new Semaphore(2);
         allLines.forEach(l -> {
             try {
                 semaphore.acquire();
-                Thread.sleep(400);
-                new Thread(() -> {
-                    operations.populateLineWithCoordinates(new RestTemplate(), l);
-                    l.setName(validation.formatName(l.getName()));
-                    repository.save(l);
-                }).start();
+                execSaveInNewThread(operations, validation, semaphore, l);
             } catch (InterruptedException e) {
                 log.error("Error during save operation: {}", e.getMessage(), e);
             }
-            log.info("Saved line {}", l.getId());
-            semaphore.release();
         });
         return allLines;
     }
@@ -88,5 +82,24 @@ public class LinesService {
             return false;
         }
         return true;
+    }
+
+    public Line findByCode(String code) {
+        return repository.findByCode(code);
+    }
+
+    private void execSaveInNewThread(LinesOperations operations, LineValidation validation, Semaphore semaphore, Line l) throws InterruptedException {
+        new Thread(() -> {
+            operations.populateLineWithCoordinates(new RestTemplate(), l);
+            l.setName(validation.formatName(l.getName()));
+            repository.save(l);
+            log.info("Saved line {}", l.getId());
+            try {
+                Thread.sleep(400);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            semaphore.release();
+        }, "Save " + l.getId()).start();
     }
 }

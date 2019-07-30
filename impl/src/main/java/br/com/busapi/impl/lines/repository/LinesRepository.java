@@ -16,4 +16,6 @@ public interface LinesRepository extends MongoRepository<Line, String> {
     List<Line> findAllByCoordinatesNear(Point point, Distance distance);
 
     List<Line> findAllByNameContains(String name);
+
+    Line findByCode(String code);
 }

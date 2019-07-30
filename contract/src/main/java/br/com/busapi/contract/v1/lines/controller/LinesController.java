@@ -78,7 +78,7 @@ public class LinesController {
     @ApiOperation(value = "Delete bus line", notes = "Delete bus line by id")
     @DeleteMapping("/{id}")
     public void deleteBusLine(@PathVariable
-                                                @ApiParam(example = "5566") Integer id) {
+                              @ApiParam(example = "5566") Integer id) {
 
         controllerFacade.deleteLine(id);
     }
@@ -120,6 +120,20 @@ public class LinesController {
         return controllerFacade.findByName(name);
     }
 
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "OK", response = BusLinetinerary.class),
+            @ApiResponse(code = 400, message = "Bad Request", response = ResponseError.class),
+            @ApiResponse(code = 403, message = "Method not Allowed", response = ResponseError.class),
+            @ApiResponse(code = 404, message = "Not found", response = ResponseError.class),
+            @ApiResponse(code = 500, message = "Internal server error", response = ResponseError.class)
+    })
+    @ApiOperation(value = "Save all buses from DataPOA")
+    @GetMapping("/code/{code}")
+    public BusLinetinerary findByCode(@RequestParam
+                                      @ApiParam(example = "261-1") String code) {
+        return controllerFacade.findByCode(code);
+    }
 
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses({
@@ -161,6 +175,4 @@ public class LinesController {
         return controllerFacade.saveAll();
     }
 
-
-//    TODO criar endpoint para Get por código
 }
