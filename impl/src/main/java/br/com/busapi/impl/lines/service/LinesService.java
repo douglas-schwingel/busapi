@@ -38,6 +38,7 @@ public class LinesService {
                 execSaveInNewThread(operations, validation, semaphore, l);
             } catch (InterruptedException e) {
                 log.error("Error during save operation: {}", e.getMessage(), e);
+                Thread.currentThread().interrupt();
             }
         });
         return allLines;
@@ -53,12 +54,12 @@ public class LinesService {
 
     public Page<Line> findAll(Pageable pageable) {
         Page<Line> page = repository.findAll(pageable);
-        if (page.getTotalPages() < page.getNumber() && pageable.isPaged()) {
+        if (page.getTotalPages() - 1 < page.getNumber() && pageable.isPaged()) {
             throw new ApiException(StandartErrorImpl.builder()
                     .status(HttpStatus.BAD_REQUEST.value())
                     .name(HttpStatus.BAD_REQUEST.name())
                     .message(String.format("Requested page(%d) is above max pages (%d)",
-                            pageable.getPageNumber(), page.getTotalPages()))
+                            pageable.getPageNumber(), page.getTotalPages() - 1))
                     .issue(new Issue(new IndexOutOfBoundsException("Request page above total pages")))
                     .suggestedApplicationAction("Create verification before sending the request")
                     .suggestedUserAction("Verify the page number and try again")
@@ -97,7 +98,8 @@ public class LinesService {
             try {
                 Thread.sleep(400);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                log.error("Exception {}", e.getMessage(), e);
+                Thread.currentThread().interrupt();
             }
             semaphore.release();
         }, "Save " + l.getId()).start();

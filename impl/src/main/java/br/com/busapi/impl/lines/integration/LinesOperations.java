@@ -55,7 +55,8 @@ public class LinesOperations {
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException ex) {
-                    ex.printStackTrace();
+                    log.error("Exception: {}", ex.getMessage(), ex);
+                    Thread.currentThread().interrupt();
                 }
                 if (count == maxRetry) throw new ApiException(StandartErrorImpl.builder()
                         .status(HttpStatus.INTERNAL_SERVER_ERROR.value())

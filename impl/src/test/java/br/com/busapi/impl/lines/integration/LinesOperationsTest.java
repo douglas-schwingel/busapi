@@ -59,11 +59,11 @@ public class LinesOperationsTest {
 
     @Test
     public void shouldPopulateTheLinesCoordinates() {
-        assertNull(lineTeste.getCoordinates());
+        assertTrue(lineTeste.getCoordinates().isEmpty());
 
         operations.populateLineWithCoordinates(new RestTemplate(), lineTeste);
 
-        assertNotNull(lineTeste.getCoordinates());
+        assertFalse(lineTeste.getCoordinates().isEmpty());
     }
 
     @Test

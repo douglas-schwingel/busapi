@@ -20,6 +20,7 @@ apply plugin: 'org.springframework.boot'
 
 dependencies {
 	implementation project(':contract')
+	implementation project(':impl')
 	implementation 'io.rest-assured:rest-assured:4.0.0'
 	implementation 'io.rest-assured:json-path:4.0.0'
 	implementation 'io.rest-assured:xml-path:4.0.0'
@@ -58,6 +59,14 @@ allprojects {
 		annotationProcessor 'org.projectlombok:lombok'
 		testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	}
+}
+
+sonarqube {
+	properties {
+		property "sonar.sourceEncoding", "UTF-8"
+		property "sonar.projectKey", "BusApi"
+	}
+
 }
 
 
