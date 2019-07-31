@@ -1,9 +1,11 @@
 package br.com.busapi.impl.lines.service;
 
 import br.com.busapi.impl.exception.ApiException;
+import br.com.busapi.impl.lines.integration.LinesOperations;
 import br.com.busapi.impl.lines.models.Line;
 import br.com.busapi.impl.lines.repository.LinesRepository;
 import br.com.busapi.impl.lines.test.utils.LinesTestsUtils;
+import br.com.busapi.impl.lines.validation.LineValidation;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -14,6 +16,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.concurrent.Semaphore;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -117,5 +120,33 @@ public class LinesServiceTest {
         Line line = service.findByCode(code);
 
         assertEquals(byCode, line);
+    }
+
+    @Test
+    public void mustAcquire3TimesFromSemaphore() {
+        List<Line> lines = utils.getAllLines();
+        LinesOperations operations = mock(LinesOperations.class);
+        Semaphore semaphore = spy(new Semaphore(2));
+        doNothing().when(operations).populateLineWithCoordinates(any(), any());
+        service.saveAll(lines, operations, new LineValidation(), new SaveThread(), semaphore);
+
+        try {
+            verify(semaphore, times(3)).acquire();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void mustCatchTheInterruptedException() throws InterruptedException {
+        Semaphore semaphore = mock(Semaphore.class);
+        LinesOperations operations = mock(LinesOperations.class);
+        SaveThread saveThread = mock(SaveThread.class);
+        doThrow(new InterruptedException()).when(semaphore).acquire();
+
+        service.saveAll(utils.getAllLines(), operations, new LineValidation(), saveThread, semaphore);
+
+        verify(saveThread, times(0)).execSaveInNewThread(any(), any(), any(), any(), any());
+
     }
 }

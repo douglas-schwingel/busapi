@@ -14,7 +14,6 @@ import org.springframework.data.geo.Distance;
 import org.springframework.data.geo.Point;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.concurrent.Semaphore;
@@ -30,12 +29,12 @@ public class LinesService {
     }
 
 
-    public List<Line> saveAll(List<Line> allLines, LinesOperations operations, LineValidation validation) {
-        Semaphore semaphore = new Semaphore(2);
+    public List<Line> saveAll(List<Line> allLines, LinesOperations operations,
+                              LineValidation validation, SaveThread thread, Semaphore semaphore) {
         allLines.forEach(l -> {
             try {
                 semaphore.acquire();
-                execSaveInNewThread(operations, validation, semaphore, l);
+                thread.execSaveInNewThread(operations, repository, validation, semaphore, l);
             } catch (InterruptedException e) {
                 log.error("Error during save operation: {}", e.getMessage(), e);
                 Thread.currentThread().interrupt();
@@ -89,19 +88,5 @@ public class LinesService {
         return repository.findByCode(code);
     }
 
-    private void execSaveInNewThread(LinesOperations operations, LineValidation validation, Semaphore semaphore, Line l) {
-        new Thread(() -> {
-            operations.populateLineWithCoordinates(new RestTemplate(), l);
-            l.setName(validation.formatName(l.getName()));
-            repository.save(l);
-            log.info("Saved line {}", l.getId());
-            try {
-                Thread.sleep(400);
-            } catch (InterruptedException e) {
-                log.error("Exception {}", e.getMessage(), e);
-                Thread.currentThread().interrupt();
-            }
-            semaphore.release();
-        }, "Save " + l.getId()).start();
-    }
+
 }

@@ -6,6 +6,7 @@ import br.com.busapi.impl.exception.issues.Issue;
 import br.com.busapi.impl.lines.integration.LinesOperations;
 import br.com.busapi.impl.lines.models.Line;
 import br.com.busapi.impl.lines.service.LinesService;
+import br.com.busapi.impl.lines.service.SaveThread;
 import br.com.busapi.impl.lines.validation.LineValidation;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +20,7 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.util.concurrent.Semaphore;
 
 @Service
 @Slf4j
@@ -36,7 +38,7 @@ public class LinesFacadeImpl {
 
     public List<Line> saveAll() {
         List<Line> allLines = operations.listBusLines(new RestTemplate(), new ObjectMapper());
-        return service.saveAll(allLines, operations, validation);
+        return service.saveAll(allLines, operations, validation, new SaveThread(), new Semaphore(2));
     }
 
     public List<Line> findNear(Point point, Distance dist) {
