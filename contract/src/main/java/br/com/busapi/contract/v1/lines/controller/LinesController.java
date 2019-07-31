@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @Api(tags = {"Lines", "v1"}, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
         produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 @RestController
-@RequestMapping("/v1/lines")
+@RequestMapping("line-service/v1/lines")
 public class LinesController {
 
     private final LinesControllerFacade controllerFacade;

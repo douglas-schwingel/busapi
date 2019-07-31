@@ -28,6 +28,7 @@ public class BusapiApplicationTest {
 
     private static final String ACCEPT = "Accept";
     private static final String JSON = "application/json";
+    private static final String BASE_RESOURCE = "line-service/v1/lines";
 
     @LocalServerPort
     private int springPort;
@@ -45,7 +46,7 @@ public class BusapiApplicationTest {
                 .expect()
                     .statusCode(200)
                 .when()
-                    .get("/v1/lines")
+                    .get(BASE_RESOURCE)
                 .andReturn()
                     .jsonPath();
 
@@ -65,7 +66,7 @@ public class BusapiApplicationTest {
                 .expect()
                     .statusCode(200)
                 .when()
-                    .get("/v1/lines")
+                    .get(BASE_RESOURCE)
                 .andReturn()
                     .jsonPath();
 
@@ -89,7 +90,7 @@ public class BusapiApplicationTest {
                 .expect()
                     .statusCode(400)
                 .when()
-                    .get("/v1/lines")
+                    .get(BASE_RESOURCE)
                 .andReturn()
                     .jsonPath();
 
@@ -109,7 +110,7 @@ public class BusapiApplicationTest {
                 .expect()
                     .statusCode(400)
                 .when()
-                    .get("/v1/lines/")
+                    .get(BASE_RESOURCE)
                 .andReturn()
                     .jsonPath();
 
@@ -137,7 +138,7 @@ public class BusapiApplicationTest {
                 .expect()
                     .statusCode(201)
                 .when()
-                    .post("/v1/lines/")
+                    .post(BASE_RESOURCE)
                 .thenReturn()
                     .jsonPath();
 
@@ -148,7 +149,7 @@ public class BusapiApplicationTest {
         .expect()
             .statusCode(204)
         .when()
-            .delete("/v1/lines/" + lineId);
+            .delete(BASE_RESOURCE + "/" + lineId);
     }
 
     @Test
@@ -158,7 +159,7 @@ public class BusapiApplicationTest {
                 .expect()
                     .statusCode(400)
                 .when()
-                    .delete("/v1/lines/" + 1093)
+                    .delete(BASE_RESOURCE + "/" + 1093)
                 .thenReturn()
                     .jsonPath();
 
@@ -181,5 +182,69 @@ public class BusapiApplicationTest {
         assertEquals("Not Found", message);
     }
 
+    @Test
+    public void mustReturnAllBusesNear() {
+        JsonPath jsonPath =
+                    given()
+                        .header(ACCEPT, JSON)
+                        .param("distance", 0.005)
+                        .param("lat", -30.146200568328)
+                        .param("lng", -51.214993133554)
+                    .expect()
+                        .statusCode(200)
+                    .when()
+                        .get(BASE_RESOURCE + "/find_near")
+                    .andReturn()
+                        .jsonPath();
+
+        List<BusLineResponse> lines = jsonPath.getObject("lines", new TypeRef<List<BusLineResponse>>() {
+        });
+
+        assertEquals(2, lines.size());
+    }
+
+    @Test
+    public void mustThrowBadRequestForInvalidLat() {
+
+        String lat = "invalid";
+        JsonPath jsonPath =
+                given()
+                    .header(ACCEPT, JSON)
+                    .param("distance", 0.005)
+                    .param("lat", lat)
+                    .param("lng", -51.214993133554)
+                .expect()
+                    .statusCode(400)
+                .when()
+                    .get(BASE_RESOURCE + "/find_near")
+                .andReturn()
+                    .jsonPath();
+        String message = jsonPath.getObject("errors[0].message", String.class);
+        assertTrue(message.contains("Value: " + lat));
+    }
+
+    @Test
+    public void mustThrowExceptionForFindNearWithoutParameters() {
+        given()
+            .header(ACCEPT, JSON)
+        .expect()
+            .statusCode(500)
+        .when()
+            .get(BASE_RESOURCE + "/find_near")
+        .andReturn()
+            .jsonPath();
+    }
+
+    @Test
+    public void mustReturnMethodNotAllowedForPostInFindNear() {
+        given()
+            .header(ACCEPT, JSON)
+        .expect()
+            .statusCode(405)
+        .when()
+            .post(BASE_RESOURCE + "/find_near")
+        .andReturn()
+            .jsonPath();
+    }
 
 }

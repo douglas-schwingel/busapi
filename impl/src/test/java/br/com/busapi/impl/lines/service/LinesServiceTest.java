@@ -14,6 +14,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.geo.Distance;
+import org.springframework.data.geo.Metrics;
+import org.springframework.data.geo.Point;
 
 import java.util.List;
 import java.util.concurrent.Semaphore;
@@ -148,5 +151,15 @@ public class LinesServiceTest {
 
         verify(saveThread, times(0)).execSaveInNewThread(any(), any(), any(), any(), any());
 
+    }
+
+    @Test
+    public void mustReturnAllBusesNear() {
+        Point point = new Point(-30, -51);
+        Distance distance = new Distance(0.005, Metrics.KILOMETERS);
+        when(repository.findAllByCoordinatesNear(point, distance)).thenReturn(utils.getAllLines());
+        List<Line> near = service.findNear(point, distance);
+
+        assertEquals(utils.getAllLines().size(), near.size());
     }
 }

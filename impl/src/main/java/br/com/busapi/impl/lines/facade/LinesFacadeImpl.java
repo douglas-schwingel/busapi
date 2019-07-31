@@ -105,12 +105,9 @@ public class LinesFacadeImpl {
     }
 
     public Line updateLine(Line line) {
-        if (validation.isValidToSave(line)) {
-            Line validatedLine = validation.validateFieldsToUpdate(line, findById(line.getId()));
-            return service.saveOne(validatedLine);
-        }
-        throw invalidDataApiException("No line with the id " + line.getId(), "Invalid line id",
-                "Contact us for more informations.", "Verify the id and try again.");
+        validation.isValidToSave(line);
+        Line validatedLine = validation.validateFieldsToUpdate(line, findById(line.getId()));
+        return service.saveOne(validatedLine);
     }
 
     public Line findByCode(String code) {
