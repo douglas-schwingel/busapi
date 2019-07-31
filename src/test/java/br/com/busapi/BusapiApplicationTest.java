@@ -1,5 +1,6 @@
 package br.com.busapi;
 
+import br.com.busapi.contract.v1.lines.models.request.LineRequest;
 import br.com.busapi.contract.v1.lines.models.response.BusLineResponse;
 import br.com.busapi.impl.lines.models.Line;
 import io.restassured.RestAssured;
@@ -121,18 +122,18 @@ public class BusapiApplicationTest {
     @Test
     public void mustSaveTheNewBusLineAndThenDelete() {
         int lineId = 1093;
-        Line line = Line.builder()
+        LineRequest lineRequest = LineRequest.builder()
                 .id(lineId)
-                .code("109-3")
-                .name("VIAMAO")
-                .coordinate(new Double[]{-30.1, -51.1})
+                .codigo("109-3")
+                .nome("VIAMAO")
+                .coordenada(new Double[]{-30.1, -51.1})
                 .build();
 
         JsonPath jsonPath =
                 given()
                     .header(ACCEPT, JSON)
                     .contentType(JSON)
-                    .body(line)
+                    .body(lineRequest)
                 .expect()
                     .statusCode(201)
                 .when()
@@ -141,7 +142,7 @@ public class BusapiApplicationTest {
                     .jsonPath();
 
         Line returned = jsonPath.getObject("$", Line.class);
-        assertEquals(line.getName(), returned.getName());
+        assertEquals(lineRequest.getNome(), returned.getName());
 
         given()
         .expect()
@@ -163,6 +164,21 @@ public class BusapiApplicationTest {
 
         String message = jsonPath.getObject("errors[0].message", String.class);
         assertEquals("No line with the id 1093", message);
+    }
+
+    @Test
+    public void mustReturnNotFoundForInvalidURI() {
+        JsonPath jsonPath =
+                given()
+                .expect()
+                    .statusCode(404)
+                .when()
+                    .get("/v1/not_existing_URI")
+                .andReturn()
+                    .jsonPath();
+
+        String message = jsonPath.getObject("errors[0].message", String.class);
+        assertEquals("Not Found", message);
     }
 
 

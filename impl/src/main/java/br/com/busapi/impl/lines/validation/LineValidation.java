@@ -1,13 +1,12 @@
 package br.com.busapi.impl.lines.validation;
 
 import br.com.busapi.impl.exception.ApiException;
-import br.com.busapi.impl.exception.errors.StandartErrorImpl;
+import br.com.busapi.impl.exception.errors.StandardError;
 import br.com.busapi.impl.exception.issues.Issue;
 import br.com.busapi.impl.lines.models.Line;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +19,7 @@ public class LineValidation {
         if (!idIsValid(line.getId())) invalidFileds.put("id", String.valueOf(line.getId()));
         if (!nameIsValid(line.getName())) invalidFileds.put("nome", line.getName());
         if (!codeIsValid(line.getCode()))invalidFileds.put("codigo", line.getCode());
-        if (!coordinatesAreValid(line.getCoordinates())) invalidFileds.put("coordenadas", line.getCode().toString());
+        if (!coordinatesAreValid(line.getCoordinates())) invalidFileds.put("coordenadas", line.getCoordinates().toString());
 
         if (invalidFileds.size() == 0) {
             return true;
@@ -28,7 +27,7 @@ public class LineValidation {
             StringBuilder message = new StringBuilder();
             message.append("Invalid fields:");
             invalidFileds.forEach((k, v) -> message.append(String.format(" | Field: %s with value %.30s", k, v)));
-            throw new ApiException(StandartErrorImpl.builder()
+            throw new ApiException(StandardError.builder()
                     .status(HttpStatus.BAD_REQUEST.value())
                     .name(HttpStatus.BAD_REQUEST.name())
                     .message(message.toString())
@@ -47,7 +46,7 @@ public class LineValidation {
                         || c[0] < -30.261371
                         || c[1] > -51.087028
                         || c[1] < -51.266828) {
-                    throw new ApiException(StandartErrorImpl.builder()
+                    throw new ApiException(StandardError.builder()
                             .status(HttpStatus.BAD_REQUEST.value())
                             .name(HttpStatus.BAD_REQUEST.name())
                             .message("Invalid coordinate: Coordinates must be within Porto Alegre's territory")

@@ -2,7 +2,7 @@ package br.com.busapi.impl.exception.handlers;
 
 import br.com.busapi.impl.exception.ApiException;
 import br.com.busapi.impl.exception.errors.ResponseError;
-import br.com.busapi.impl.exception.errors.StandartErrorImpl;
+import br.com.busapi.impl.exception.errors.StandardError;
 import br.com.busapi.impl.exception.issues.Issue;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -32,7 +32,7 @@ public class MyExceptionHandler {
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResponseEntity<ResponseError> httpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException exception,
                                                                                 HttpServletRequest request) {
-        StandartErrorImpl error = StandartErrorImpl.builder()
+        StandardError error = StandardError.builder()
                 .name(HttpStatus.METHOD_NOT_ALLOWED.name())
                 .status(HttpStatus.METHOD_NOT_ALLOWED.value())
                 .message("Method not allowed")
@@ -54,7 +54,7 @@ public class MyExceptionHandler {
         Map<String, String[]> parameterMap = request.getParameterMap();
         StringBuilder message = new StringBuilder();
         parameterMap.forEach((k, v) -> message.append(String.format("Parameter: %.6s - Value: %.10s | ", k, v[0])));
-        StandartErrorImpl error = StandartErrorImpl.builder()
+        StandardError error = StandardError.builder()
                 .name(HttpStatus.BAD_REQUEST.name())
                 .status(HttpStatus.BAD_REQUEST.value())
                 .message("Invalid parameters: " + message.toString())
@@ -73,7 +73,7 @@ public class MyExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ResponseError> exception(Exception exception, HttpServletRequest request) {
-        ApiException apiException = new ApiException(StandartErrorImpl.builder()
+        ApiException apiException = new ApiException(StandardError.builder()
                 .message("Unexcpected error")
                 .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .name(HttpStatus.INTERNAL_SERVER_ERROR.name())

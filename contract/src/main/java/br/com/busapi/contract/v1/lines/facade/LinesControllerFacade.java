@@ -1,6 +1,7 @@
 package br.com.busapi.contract.v1.lines.facade;
 
 import br.com.busapi.contract.v1.lines.mapper.LinesMapper;
+import br.com.busapi.contract.v1.lines.models.request.LineRequest;
 import br.com.busapi.contract.v1.lines.models.response.BusLineResponse;
 import br.com.busapi.contract.v1.lines.models.response.BusLinetinerary;
 import br.com.busapi.contract.v1.lines.models.response.ListBusLineResponse;
@@ -43,7 +44,8 @@ public class LinesControllerFacade {
         return facadeImpl.findAll(pageable).map(mapper::mapToBusLineResponse);
     }
 
-    public BusLineResponse saveOne(Line line) {
+    public BusLineResponse saveOne(LineRequest lineRequest) {
+        Line line = mapper.mapToLine(lineRequest);
         return mapper.mapToBusLineResponse(facadeImpl.saveOne(line));
     }
 
@@ -55,7 +57,8 @@ public class LinesControllerFacade {
         facadeImpl.deleteLine(id);
     }
 
-    public BusLineResponse updateBusLine(Line line) {
+    public BusLineResponse updateBusLine(LineRequest lineRequest) {
+        Line line = mapper.mapToLine(lineRequest);
         return mapper.mapToBusLineResponse(facadeImpl.updateLine(line));
     }
 

@@ -1,7 +1,7 @@
 package br.com.busapi.impl.lines.service;
 
 import br.com.busapi.impl.exception.ApiException;
-import br.com.busapi.impl.exception.errors.StandartErrorImpl;
+import br.com.busapi.impl.exception.errors.StandardError;
 import br.com.busapi.impl.exception.issues.Issue;
 import br.com.busapi.impl.lines.integration.LinesOperations;
 import br.com.busapi.impl.lines.models.Line;
@@ -55,7 +55,7 @@ public class LinesService {
     public Page<Line> findAll(Pageable pageable) {
         Page<Line> page = repository.findAll(pageable);
         if (page.getTotalPages() - 1 < page.getNumber() && pageable.isPaged()) {
-            throw new ApiException(StandartErrorImpl.builder()
+            throw new ApiException(StandardError.builder()
                     .status(HttpStatus.BAD_REQUEST.value())
                     .name(HttpStatus.BAD_REQUEST.name())
                     .message(String.format("Requested page(%d) is above max pages (%d)",
@@ -89,7 +89,7 @@ public class LinesService {
         return repository.findByCode(code);
     }
 
-    private void execSaveInNewThread(LinesOperations operations, LineValidation validation, Semaphore semaphore, Line l) throws InterruptedException {
+    private void execSaveInNewThread(LinesOperations operations, LineValidation validation, Semaphore semaphore, Line l) {
         new Thread(() -> {
             operations.populateLineWithCoordinates(new RestTemplate(), l);
             l.setName(validation.formatName(l.getName()));

@@ -1,12 +1,11 @@
 package br.com.busapi.contract.v1.lines.controller;
 
 import br.com.busapi.contract.v1.lines.facade.LinesControllerFacade;
+import br.com.busapi.contract.v1.lines.models.request.LineRequest;
 import br.com.busapi.contract.v1.lines.models.response.BusLineResponse;
 import br.com.busapi.contract.v1.lines.models.response.BusLinetinerary;
 import br.com.busapi.contract.v1.lines.models.response.ListBusLineResponse;
-import br.com.busapi.impl.exception.errors.NoContentError;
 import br.com.busapi.impl.exception.errors.ResponseError;
-import br.com.busapi.impl.lines.models.Line;
 import io.swagger.annotations.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -55,9 +54,8 @@ public class LinesController {
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = BusLinetinerary.class),
-            @ApiResponse(code = 204, message = "No Content", response = NoContentError.class),
             @ApiResponse(code = 400, message = "Bad Request", response = ResponseError.class),
-            @ApiResponse(code = 403, message = "Method not Allowed", response = ResponseError.class),
+            @ApiResponse(code = 404, message = "Not found", response = ResponseError.class),
             @ApiResponse(code = 405, message = "Method not Allowed", response = ResponseError.class),
             @ApiResponse(code = 500, message = "Internal server error", response = ResponseError.class)
     })
@@ -72,6 +70,7 @@ public class LinesController {
     @ApiResponses({
             @ApiResponse(code = 204, message = "Delete successful - No content"),
             @ApiResponse(code = 400, message = "Bad Request", response = ResponseError.class),
+            @ApiResponse(code = 405, message = "Method not Allowed", response = ResponseError.class),
             @ApiResponse(code = 405, message = "Method not Allowed", response = ResponseError.class),
             @ApiResponse(code = 500, message = "Internal server error", response = ResponseError.class)
     })
@@ -110,8 +109,8 @@ public class LinesController {
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = ListBusLineResponse.class),
             @ApiResponse(code = 400, message = "Bad Request", response = ResponseError.class),
-            @ApiResponse(code = 403, message = "Method not Allowed", response = ResponseError.class),
             @ApiResponse(code = 404, message = "Not found", response = ResponseError.class),
+            @ApiResponse(code = 405, message = "Method not Allowed", response = ResponseError.class),
             @ApiResponse(code = 500, message = "Internal server error", response = ResponseError.class)
     })
     @ApiOperation(value = "Get all by name", notes = "Find all bus lines that contains the given string")
@@ -144,21 +143,22 @@ public class LinesController {
     })
     @ApiOperation(value = "Save bus line", notes = "Save new bus line")
     @PostMapping
-    public BusLineResponse saveBusLine(@RequestBody Line line) {
-        return controllerFacade.saveOne(line);
+    public BusLineResponse saveBusLine(@RequestBody LineRequest lineRequest) {
+        return controllerFacade.saveOne(lineRequest);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses({
             @ApiResponse(code = 200, message = "Updated", response = BusLineResponse.class),
+            @ApiResponse(code = 204, message = "Delete successful - No content"),
             @ApiResponse(code = 400, message = "Bad Request", response = ResponseError.class),
             @ApiResponse(code = 405, message = "Method not Allowed", response = ResponseError.class),
             @ApiResponse(code = 500, message = "Internal server error", response = ResponseError.class)
     })
     @ApiOperation(value = "Update bus line", notes = "Update a bus line")
     @PutMapping
-    public BusLineResponse updateBusLine(@RequestBody Line line) {
-        return controllerFacade.updateBusLine(line);
+    public BusLineResponse updateBusLine(@RequestBody LineRequest lineRequest) {
+        return controllerFacade.updateBusLine(lineRequest);
     }
 
     @ResponseStatus(HttpStatus.CREATED)

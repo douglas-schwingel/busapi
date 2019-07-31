@@ -13,7 +13,7 @@ import java.util.List;
 @Builder
 @Data
 @ApiModel
-public class StandartErrorImpl implements Serializable, StandartError {
+public class StandardError implements Serializable {
 
     @ApiModelProperty(example = "BAD_REQUEST")
     private String name;

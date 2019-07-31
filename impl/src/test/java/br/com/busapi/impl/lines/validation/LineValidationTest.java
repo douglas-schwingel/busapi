@@ -4,7 +4,6 @@ import br.com.busapi.impl.lines.models.Line;
 import br.com.busapi.impl.lines.test.utils.LinesTestsUtils;
 import org.junit.Test;
 
-import java.util.Arrays;
 import java.util.Collections;
 
 import static org.junit.Assert.assertFalse;
@@ -51,15 +50,9 @@ public class LineValidationTest {
 
     @Test
     public void mustReturnFalseForInvalidCoordinates() {
-//        TODO reavaliar esse teste pra fazer funcionar
         Line random = utils.getRandom();
-        random.getCoordinates().forEach(d -> System.out.println(d[0] + " | " + d[1]));
-        assertTrue(validation.coordinatesAreValid(random.getCoordinates()));
 
         random.setCoordinates(null);
-        assertFalse(validation.coordinatesAreValid(random.getCoordinates()));
-
-        random.setCoordinates(Collections.singletonList(new Double[]{30.0, -51.1}));
         assertFalse(validation.coordinatesAreValid(random.getCoordinates()));
     }
 

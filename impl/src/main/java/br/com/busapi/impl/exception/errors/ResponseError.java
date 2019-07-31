@@ -19,7 +19,7 @@ public class ResponseError implements Serializable {
     @ApiModelProperty(example = "pt-BR")
     private String language;
     @Singular
-    private List<StandartError> errors;
+    private List<StandardError> errors;
 
 
 

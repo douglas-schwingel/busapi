@@ -1,7 +1,7 @@
 package br.com.busapi.contract.v1.error.controller;
 
 import br.com.busapi.impl.exception.ApiException;
-import br.com.busapi.impl.exception.errors.StandartErrorImpl;
+import br.com.busapi.impl.exception.errors.StandardError;
 import br.com.busapi.impl.exception.issues.Issue;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.servlet.error.ErrorController;
@@ -20,7 +20,7 @@ public class MyErrorController implements ErrorController {
     @GetMapping("/error")
     public void error(HttpServletRequest request) {
         HttpStatus httpStatus = getStatus(request);
-        throw new ApiException(StandartErrorImpl.builder()
+        throw new ApiException(StandardError.builder()
                 .message(httpStatus.getReasonPhrase())
                 .status(httpStatus.value())
                 .name(httpStatus.name())

@@ -1,11 +1,10 @@
 package br.com.busapi.contract.v1.lines.mapper;
 
+import br.com.busapi.contract.v1.lines.models.request.LineRequest;
 import br.com.busapi.contract.v1.lines.models.response.BusLineResponse;
 import br.com.busapi.contract.v1.lines.models.response.BusLinetinerary;
-import br.com.busapi.contract.v1.lines.models.response.DeletedBusLineResponse;
 import br.com.busapi.contract.v1.lines.models.response.ListBusLineResponse;
 import br.com.busapi.impl.lines.models.Line;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,11 +35,12 @@ public class LinesMapper {
                 .build();
     }
 
-    public DeletedBusLineResponse mapToDeletedBusLineResponse(Line deleteLine) {
-        return DeletedBusLineResponse.builder()
-                .status(HttpStatus.OK.value())
-                .message("Line with id " + deleteLine.getId() + " ]deleted with success.")
-                .deletedLine(deleteLine)
+    public Line mapToLine(LineRequest lineRequest) {
+        return Line.builder()
+                .id(lineRequest.getId())
+                .name(lineRequest.getNome())
+                .code(lineRequest.getCodigo())
+                .coordinates(lineRequest.getCoordenadas())
                 .build();
     }
 }

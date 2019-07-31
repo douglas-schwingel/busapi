@@ -1,8 +1,7 @@
 package br.com.busapi.impl.lines.facade;
 
 import br.com.busapi.impl.exception.ApiException;
-import br.com.busapi.impl.exception.errors.NoContentError;
-import br.com.busapi.impl.exception.errors.StandartErrorImpl;
+import br.com.busapi.impl.exception.errors.StandardError;
 import br.com.busapi.impl.exception.issues.Issue;
 import br.com.busapi.impl.lines.integration.LinesOperations;
 import br.com.busapi.impl.lines.models.Line;
@@ -59,7 +58,7 @@ public class LinesFacadeImpl {
             if (service.findById(line.getId()) == null) {
                 return service.saveOne(line);
             } else {
-                throw new ApiException(StandartErrorImpl.builder()
+                throw new ApiException(StandardError.builder()
                         .status(HttpStatus.METHOD_NOT_ALLOWED.value())
                         .name(HttpStatus.METHOD_NOT_ALLOWED.name())
                         .message("Uptades should be done with PUT and not POST")
@@ -78,24 +77,22 @@ public class LinesFacadeImpl {
     public Line findById(Integer id) {
         Line line = service.findById(id);
         if (line == null) {
-            throw new ApiException(NoContentError.builder()
-                    .message("Request was successful but there is no entries to return.")
-                    .name(HttpStatus.NO_CONTENT.name())
-                    .status((HttpStatus.NO_CONTENT.value()))
-                    .build());
+            throw invalidDataApiException("No registered line with id: " + id, "Unregistered id",
+                    "Create verification before sending the request", "Verify the informed id and try again");
         }
         return line;
     }
 
-    public Line deleteLine(Integer id) {
+    public void deleteLine(Integer id) {
         Line lineToBeDeleted = service.findById(id);
-        if (service.deleteLine(lineToBeDeleted)) return lineToBeDeleted;
-        throw invalidDataApiException("No line with the id " + id, "Invalid line id",
-                "Contact us for more informations.", "Verify the id and try again.");
+        if (!service.deleteLine(lineToBeDeleted)) {
+            throw invalidDataApiException("No line with the id " + id, "Invalid line id",
+                    "Contact us for more informations.", "Verify the id and try again.");
+        }
     }
 
     private ApiException invalidDataApiException(String exceptionMessage, String issueMessage, String appAction, String userAction) {
-        return new ApiException(StandartErrorImpl.builder()
+        return new ApiException(StandardError.builder()
                 .status(HttpStatus.BAD_REQUEST.value())
                 .message(exceptionMessage)
                 .name(HttpStatus.BAD_REQUEST.name())

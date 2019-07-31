@@ -1,6 +1,6 @@
 package br.com.busapi.impl.exception;
 
-import br.com.busapi.impl.exception.errors.StandartError;
+import br.com.busapi.impl.exception.errors.StandardError;
 import lombok.Getter;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -11,9 +11,9 @@ import java.util.List;
 public class ApiException extends RuntimeException {
 
     @Getter
-    private final List<StandartError> errors;
+    private final List<StandardError> errors;
 
-    public ApiException(StandartError... errors) {
+    public ApiException(StandardError... errors) {
         super(errors[0].getMessage());
         this.errors = Arrays.asList(errors);
     }

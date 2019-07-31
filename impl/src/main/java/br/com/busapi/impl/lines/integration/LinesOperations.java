@@ -1,7 +1,7 @@
 package br.com.busapi.impl.lines.integration;
 
 import br.com.busapi.impl.exception.ApiException;
-import br.com.busapi.impl.exception.errors.StandartErrorImpl;
+import br.com.busapi.impl.exception.errors.StandardError;
 import br.com.busapi.impl.exception.issues.Issue;
 import br.com.busapi.impl.lines.models.Coordinate;
 import br.com.busapi.impl.lines.models.Line;
@@ -58,7 +58,7 @@ public class LinesOperations {
                     log.error("Exception: {}", ex.getMessage(), ex);
                     Thread.currentThread().interrupt();
                 }
-                if (count == maxRetry) throw new ApiException(StandartErrorImpl.builder()
+                if (count == maxRetry) throw new ApiException(StandardError.builder()
                         .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
                         .message("Internal error during request for DataPOA")
                         .name(HttpStatus.INTERNAL_SERVER_ERROR.name())
