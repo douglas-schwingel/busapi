@@ -2,6 +2,7 @@
 DataPOA based bus API
 
 ### Why MongoDb?
+###### Run with Mongo's official Docker image
 
 - Schema Flexibility;
 - Embedded coordinates: Using mongo, there's no need to use join in large tables containing 200+ coordinates for each bus line.One can simply put a List of coordinates in a Document and store everything in one place.
@@ -24,8 +25,17 @@ DataPOA based bus API
 - Java Code Coverage for testing
 - Used to verify code coverage in SonarQube;
 
+### Why SonarQube?
+###### Run with SonarQube's official Docker image
+
+- Complete code analysis: bugs, vulnerabilities, code smells, etc.
+
 ### Why Swagger-UI?
 
 - Auto-generated API Documentation
 - Easily customized using annotations
 - HTML page with requests samples
+
+###### Access to API Documentation with Requests Samples
+
+> http://localhost:8080/swagger-ui.html
