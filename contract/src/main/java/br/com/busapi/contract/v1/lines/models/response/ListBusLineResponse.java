@@ -6,6 +6,7 @@ import java.util.List;
 
 @Data
 @Builder
+@Generated
 public class ListBusLineResponse {
 
     @Singular

@@ -12,6 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel
+@Generated
 public class ResponseError implements Serializable {
 
     @ApiModelProperty(example = "/v2/not_found")

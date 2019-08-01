@@ -9,6 +9,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Generated
 public class LineRequest {
 
     @ApiModelProperty(example = "5566")
