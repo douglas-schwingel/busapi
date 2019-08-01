@@ -1,20 +1,23 @@
-package br.com.busapi.impl.lines.test.utils;
+package br.com.busapi.impl.lines.utils;
 
 import br.com.busapi.impl.lines.models.Line;
-import org.springframework.data.domain.Page;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Collectors;
 
-public class LinesTestsUtils {
+/**
+ * Utilitary class. Randomly generates coordinates for BusLines.
+ * @implNote Test usage only
+ *
+ *
+ */
+public class LinesRandomizer {
 
-    private static List<Line> lines;
+    private List<Line> lines = new ArrayList<>();
 
-    public LinesTestsUtils() {
-        lines = new ArrayList<>();
-
+    public LinesRandomizer() {
         lines.add(Line.builder()
                 .id(1093)
                 .name("VIAMAO")
@@ -38,7 +41,7 @@ public class LinesTestsUtils {
     }
 
     private List<Double[]> randomNumberOfCoordinates() {
-        int max = new Random().nextInt(10);
+        int max = new SecureRandom().nextInt(10);
         List<Double[]> list = new ArrayList<>();
         for (int i = 0; i < max; i++) {
             list.add(rngCoordinate());
@@ -53,13 +56,13 @@ public class LinesTestsUtils {
     private Double rngLat() {
         Double min = -30.261371;
         Double max = -29.954468;
-        return min + (max - min) * new Random().nextDouble();
+        return min + (max - min) * new SecureRandom().nextDouble();
     }
 
     private Double rngLgn() {
         Double min = -51.266828;
         Double max = -51.087028;
-        return min + (max - min) * new Random().nextDouble();
+        return min + (max - min) * new SecureRandom().nextDouble();
     }
 
     public List<Line> getByNameContains(String pattern) {
@@ -71,15 +74,15 @@ public class LinesTestsUtils {
     }
 
     public Line getRandom() {
-        return lines.get(new Random().nextInt(lines.size()));
+        return lines.get(new SecureRandom().nextInt(lines.size()));
     }
 
     public Line getById(Integer recievedId) {
-        return lines.stream().filter(line -> line.getId().equals(recievedId)).findFirst().get();
+        return lines.stream().filter(line -> line.getId().equals(recievedId)).findFirst().orElse(getRandom());
     }
 
     public Line getByCode(String recievedCode) {
-        return lines.stream().filter(line -> line.getCode().equals(recievedCode)).findFirst().get();
+        return lines.stream().filter(line -> line.getCode().equals(recievedCode)).findFirst().orElse(getRandom());
     }
 
 }

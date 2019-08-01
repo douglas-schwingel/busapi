@@ -2,7 +2,7 @@ package br.com.busapi.impl.lines.validation;
 
 import br.com.busapi.impl.exception.ApiException;
 import br.com.busapi.impl.lines.models.Line;
-import br.com.busapi.impl.lines.test.utils.LinesTestsUtils;
+import br.com.busapi.impl.lines.utils.LinesRandomizer;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -14,7 +14,7 @@ import static org.junit.Assert.*;
 public class LineValidationTest {
 
     private LineValidation validation = new LineValidation();
-    private LinesTestsUtils utils = new LinesTestsUtils();
+    private LinesRandomizer utils = new LinesRandomizer();
 
     @Rule
     public ExpectedException exception = ExpectedException.none();

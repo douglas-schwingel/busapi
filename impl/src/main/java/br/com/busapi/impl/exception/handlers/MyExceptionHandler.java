@@ -74,7 +74,7 @@ public class MyExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ResponseError> exception(Exception exception, HttpServletRequest request) {
         ApiException apiException = new ApiException(StandardError.builder()
-                .message("Unexcpected error")
+                .message(exception.getMessage())
                 .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .name(HttpStatus.INTERNAL_SERVER_ERROR.name())
                 .issue(new Issue(exception))
