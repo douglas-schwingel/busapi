@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Generated;
 import lombok.Singular;
 
 import java.io.Serializable;
@@ -13,6 +14,7 @@ import java.util.List;
 @Builder
 @Data
 @ApiModel
+@Generated
 public class StandardError implements Serializable {
 
     @ApiModelProperty(example = "BAD_REQUEST")

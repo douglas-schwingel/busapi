@@ -1,15 +1,13 @@
 package br.com.busapi.contract.v1.lines.models.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Generated
 public class BusLineResponse {
 
     private Integer id;

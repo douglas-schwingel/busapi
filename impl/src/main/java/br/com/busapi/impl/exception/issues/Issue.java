@@ -4,12 +4,14 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Generated;
 
 import java.io.Serializable;
 
 @Data
 @AllArgsConstructor
 @ApiModel
+@Generated
 public class Issue implements Serializable {
 
     @ApiModelProperty(example = "org.springframework.http.HttpStatus")

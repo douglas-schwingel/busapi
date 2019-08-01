@@ -13,6 +13,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Generated
 public class Line {
 
     @ApiModelProperty(example = "5566")
