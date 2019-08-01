@@ -2,6 +2,7 @@ package br.com.busapi;
 
 import br.com.busapi.contract.v1.lines.models.request.LineRequest;
 import br.com.busapi.contract.v1.lines.models.response.BusLineResponse;
+import br.com.busapi.contract.v1.lines.models.response.BusLinetinerary;
 import br.com.busapi.impl.lines.models.Line;
 import io.restassured.RestAssured;
 import io.restassured.common.mapper.TypeRef;
@@ -29,6 +30,7 @@ public class BusapiApplicationTest {
     private static final String ACCEPT = "Accept";
     private static final String JSON = "application/json";
     private static final String BASE_RESOURCE = "line-service/v1/lines";
+    private static final String MESSAGE_PATH = "errors[0].message";
 
     @LocalServerPort
     private int springPort;
@@ -81,7 +83,7 @@ public class BusapiApplicationTest {
 
     @Test
     public void mustReturnBadRequestFor90Pages() {
-        int reqPageNumber = 90;
+        Integer reqPageNumber = 90;
         JsonPath jsonPath =
                 given()
                     .header(ACCEPT, JSON)
@@ -94,7 +96,7 @@ public class BusapiApplicationTest {
                 .andReturn()
                     .jsonPath();
 
-        String message = jsonPath.getObject("errors[0].message", String.class);
+        String message = jsonPath.getObject(MESSAGE_PATH, String.class);
         String name = jsonPath.getObject("errors[0].name", String.class);
         assertTrue(message.contains("page(" + reqPageNumber + ")"));
         assertEquals("BAD_REQUEST", name);
@@ -114,7 +116,7 @@ public class BusapiApplicationTest {
                 .andReturn()
                     .jsonPath();
 
-        String message = jsonPath.getObject("errors[0].message", String.class);
+        String message = jsonPath.getObject(MESSAGE_PATH, String.class);
 
         assertTrue(message.contains("Invalid parameters"));
         assertTrue(message.contains("page - Value: " + page));
@@ -122,7 +124,7 @@ public class BusapiApplicationTest {
 
     @Test
     public void mustSaveTheNewBusLineAndThenDelete() {
-        int lineId = 1093;
+        Integer lineId = 1093;
         LineRequest lineRequest = LineRequest.builder()
                 .id(lineId)
                 .codigo("109-3")
@@ -142,8 +144,9 @@ public class BusapiApplicationTest {
                 .thenReturn()
                     .jsonPath();
 
-        Line returned = jsonPath.getObject("$", Line.class);
-        assertEquals(lineRequest.getNome(), returned.getName());
+        Line response = jsonPath.getObject("$", Line.class);
+        assertEquals(lineRequest.getNome(), response.getName());
+        assertEquals(lineId, response.getId());
 
         given()
         .expect()
@@ -163,7 +166,7 @@ public class BusapiApplicationTest {
                 .thenReturn()
                     .jsonPath();
 
-        String message = jsonPath.getObject("errors[0].message", String.class);
+        String message = jsonPath.getObject(MESSAGE_PATH, String.class);
         assertEquals("No line with the id 1093", message);
     }
 
@@ -178,7 +181,7 @@ public class BusapiApplicationTest {
                 .andReturn()
                     .jsonPath();
 
-        String message = jsonPath.getObject("errors[0].message", String.class);
+        String message = jsonPath.getObject(MESSAGE_PATH, String.class);
         assertEquals("Not Found", message);
     }
 
@@ -200,7 +203,7 @@ public class BusapiApplicationTest {
         List<BusLineResponse> lines = jsonPath.getObject("lines", new TypeRef<List<BusLineResponse>>() {
         });
 
-        assertEquals(2, lines.size());
+        assertEquals(3, lines.size());
     }
 
     @Test
@@ -219,7 +222,7 @@ public class BusapiApplicationTest {
                     .get(BASE_RESOURCE + "/find_near")
                 .andReturn()
                     .jsonPath();
-        String message = jsonPath.getObject("errors[0].message", String.class);
+        String message = jsonPath.getObject(MESSAGE_PATH, String.class);
         assertTrue(message.contains("Value: " + lat));
     }
 
@@ -246,5 +249,83 @@ public class BusapiApplicationTest {
         .andReturn()
             .jsonPath();
     }
+
+    @Test
+    public void mustUpdateLineSuccessfully() {
+        Integer lineId = 1704;
+        LineRequest lineRequest = LineRequest.builder()
+                .id(lineId)
+                .codigo("M170-4")
+                .nome("VIAMAO")
+                .coordenada(new Double[]{-30.146200568328, -51.214993133554})
+                .build();
+
+        JsonPath jsonPath = given()
+                            .header(ACCEPT, JSON)
+                            .contentType(JSON)
+                            .body(lineRequest)
+                        .expect()
+                            .statusCode(200)
+                        .when()
+                            .put(BASE_RESOURCE)
+                        .andReturn()
+                            .jsonPath();
+
+        Line response = jsonPath.getObject("$", Line.class);
+        assertEquals(lineId, response.getId());
+    }
+
+    @Test
+    public void mustReturnACompleteLineWithTheGivenId() {
+        Integer lineId = 5586;
+        JsonPath jsonPath =
+                given()
+                    .header(ACCEPT, JSON)
+                .expect()
+                    .statusCode(200)
+                .when()
+                    .get(BASE_RESOURCE + "/" + lineId)
+                .andReturn()
+                    .jsonPath();
+
+        BusLinetinerary response = jsonPath.getObject("$", BusLinetinerary.class);
+        assertEquals(lineId, response.getId());
+        assertEquals("SANTA_MARIA", response.getName());
+    }
+
+    @Test
+    public void shouldReturnBadRequestForNotExistingId() {
+        Integer lineId = 1074;
+        JsonPath jsonPath =
+                given()
+                    .header(ACCEPT, JSON)
+                .expect()
+                    .statusCode(400)
+                .when()
+                    .get(BASE_RESOURCE + "/" + lineId)
+                .andReturn()
+                    .jsonPath();
+        String message = jsonPath.getObject(MESSAGE_PATH, String.class);
+        assertEquals("No registered line with id: " + lineId, message);
+    }
+
+    @Test
+    public void mustReturnBadRequestWhenTryingToDeleteNotExistingId() {
+        Integer lineId = 1074;
+        JsonPath jsonPath =
+                given()
+                    .header(ACCEPT, JSON)
+                .expect()
+                    .statusCode(400)
+                .when()
+                    .delete(BASE_RESOURCE + "/" + lineId)
+                .andReturn()
+                    .jsonPath();
+
+        String message = jsonPath.getObject(MESSAGE_PATH, String.class);
+        assertEquals("No line with the id " + lineId, message);
+    }
+
+
 
 }

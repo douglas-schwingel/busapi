@@ -129,7 +129,7 @@ public class LinesController {
     })
     @ApiOperation(value = "Find bus by code")
     @GetMapping("/code/{code}")
-    public BusLinetinerary findByCode(@RequestParam
+    public BusLinetinerary findByCode(@PathVariable
                                       @ApiParam(example = "264-1") String code) {
         return controllerFacade.findByCode(code);
     }
