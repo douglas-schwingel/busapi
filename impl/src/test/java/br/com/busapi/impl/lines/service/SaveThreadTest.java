@@ -2,7 +2,7 @@ package br.com.busapi.impl.lines.service;
 
 import br.com.busapi.impl.lines.integration.LinesOperations;
 import br.com.busapi.impl.lines.repository.LinesRepository;
-import br.com.busapi.impl.lines.test.utils.LinesTestsUtils;
+import br.com.busapi.impl.lines.utils.LinesRandomizer;
 import br.com.busapi.impl.lines.validation.LineValidation;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,12 +15,12 @@ import static org.mockito.Mockito.*;
 public class SaveThreadTest {
 
     private SaveThread saveThread;
-    private LinesTestsUtils utils;
+    private LinesRandomizer utils;
 
     @Before
     public void setUp() {
         saveThread = new SaveThread();
-        utils = new LinesTestsUtils();
+        utils = new LinesRandomizer();
     }
 
     @Test

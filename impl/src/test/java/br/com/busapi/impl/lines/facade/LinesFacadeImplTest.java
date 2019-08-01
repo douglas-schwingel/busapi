@@ -4,7 +4,7 @@ import br.com.busapi.impl.exception.ApiException;
 import br.com.busapi.impl.lines.integration.LinesOperations;
 import br.com.busapi.impl.lines.models.Line;
 import br.com.busapi.impl.lines.service.LinesService;
-import br.com.busapi.impl.lines.test.utils.LinesTestsUtils;
+import br.com.busapi.impl.lines.utils.LinesRandomizer;
 import br.com.busapi.impl.lines.validation.LineValidation;
 import org.junit.Before;
 import org.junit.Rule;
@@ -29,7 +29,7 @@ public class LinesFacadeImplTest {
     private LinesOperations operations;
     private LineValidation validation;
     private LinesFacadeImpl facade;
-    private LinesTestsUtils utils;
+    private LinesRandomizer utils;
 
     @Rule
     public ExpectedException exception = ExpectedException.none();
@@ -40,7 +40,7 @@ public class LinesFacadeImplTest {
         operations = mock(LinesOperations.class);
         validation = mock(LineValidation.class);
         facade = new LinesFacadeImpl(service, operations, validation);
-        utils = new LinesTestsUtils();
+        utils = new LinesRandomizer();
     }
 
     @Test

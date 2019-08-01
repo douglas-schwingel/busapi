@@ -4,7 +4,7 @@ import br.com.busapi.impl.exception.ApiException;
 import br.com.busapi.impl.lines.integration.LinesOperations;
 import br.com.busapi.impl.lines.models.Line;
 import br.com.busapi.impl.lines.repository.LinesRepository;
-import br.com.busapi.impl.lines.test.utils.LinesTestsUtils;
+import br.com.busapi.impl.lines.utils.LinesRandomizer;
 import br.com.busapi.impl.lines.validation.LineValidation;
 import org.junit.Before;
 import org.junit.Rule;
@@ -30,7 +30,7 @@ public class LinesServiceTest {
 
     private LinesService service;
 
-    private LinesTestsUtils utils = new LinesTestsUtils();
+    private LinesRandomizer utils = new LinesRandomizer();
 
     @Rule
     public ExpectedException exception = ExpectedException.none();
