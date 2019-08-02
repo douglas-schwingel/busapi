@@ -10,11 +10,15 @@ import br.com.busapi.impl.lines.service.SaveThread;
 import br.com.busapi.impl.lines.validation.LineValidation;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.geo.Distance;
 import org.springframework.data.geo.Point;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Service;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.client.RestTemplate;
@@ -24,11 +28,15 @@ import java.util.concurrent.Semaphore;
 
 @Service
 @Slf4j
+@EnableScheduling
 public class LinesFacadeImpl {
 
     private final LinesService service;
     private final LinesOperations operations;
     private LineValidation validation;
+
+    @Value("${app.isRealApplication}")
+    private boolean isRealApplication;
 
     public LinesFacadeImpl(LinesService service, LinesOperations operations, LineValidation validation) {
         this.service = service;
@@ -36,9 +44,12 @@ public class LinesFacadeImpl {
         this.validation = validation;
     }
 
-    public List<Line> saveAll() {
-        List<Line> allLines = operations.listBusLines(new RestTemplate(), new ObjectMapper());
-        return service.saveAll(allLines, operations, validation, new SaveThread(), new Semaphore(2));
+    @EventListener(ApplicationReadyEvent.class)
+    public void saveAll() {
+        if (isRealApplication){
+            List<Line> allLines = operations.listBusLines(new RestTemplate(), new ObjectMapper());
+            service.saveAll(allLines, operations, validation, new SaveThread(), new Semaphore(2));
+        }
     }
 
     public List<Line> findNear(Point point, Distance dist) {

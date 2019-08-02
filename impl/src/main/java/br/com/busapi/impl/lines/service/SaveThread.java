@@ -29,7 +29,7 @@ public class SaveThread {
     }
 
     private void doSave(LinesOperations operations, LinesRepository repository, LineValidation validation, Line l) {
-        operations.populateLineWithCoordinates(new RestTemplate(), l);
+            operations.populateLineWithCoordinates(new RestTemplate(), l);
         l.setName(validation.formatName(l.getName()));
         repository.save(l);
         log.info("Saved line {}", l.getId());

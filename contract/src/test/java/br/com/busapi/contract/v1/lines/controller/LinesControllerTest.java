@@ -156,16 +156,6 @@ public class LinesControllerTest {
         assertEquals(random.getId(), response.getId());
     }
 
-    @Test
-    public void mustReturnListBusLineResponseForSavingAll() {
-        when(facadeImpl.saveAll()).thenReturn(utils.getAllLines());
-
-        ListBusLineResponse listBusLineResponse = controller.saveAll();
-        verify(controllerFacade, times(1)).saveAll();
-
-        assertEquals(3, listBusLineResponse.getLines().size());
-    }
-
     private LineRequest getRandomLineRequest(Line random) {
         return LineRequest.builder()
                 .id(random.getId())

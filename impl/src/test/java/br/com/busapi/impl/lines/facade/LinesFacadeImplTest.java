@@ -15,12 +15,13 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.geo.Distance;
 import org.springframework.data.geo.Point;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 public class LinesFacadeImplTest {
@@ -44,13 +45,23 @@ public class LinesFacadeImplTest {
     }
 
     @Test
-    public void mustReturnAllSavedLines() {
+    public void mustNotCallSaveAllWhenTesting() {
         when(operations.listBusLines(any(), any())).thenReturn(utils.getAllLines());
-        when(service.saveAll(any(), any(), any(), any(), any())).thenReturn(utils.getAllLines());
 
-        List<Line> lines = facade.saveAll();
+        ReflectionTestUtils.setField(facade, "isRealApplication", false);
 
-        assertEquals(utils.getAllLines().size(), lines.size());
+        facade.saveAll();
+        verify(service, times(0)).saveAll(any(), any(), any(),any(), any());
+    }
+
+    @Test
+    public void mustCallSaveAllWhenNotTesting() {
+        when(operations.listBusLines(any(), any())).thenReturn(utils.getAllLines());
+
+        ReflectionTestUtils.setField(facade, "isRealApplication", true);
+
+        facade.saveAll();
+        verify(service, times(1)).saveAll(any(), any(), any(), any(), any());
     }
 
     @Test

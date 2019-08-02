@@ -26,11 +26,6 @@ public class LinesControllerFacade {
         this.mapper = mapper;
     }
 
-    public ListBusLineResponse saveAll() {
-        List<Line> lines = facadeImpl.saveAll();
-        return mapper.mapToListBusLinesResponse(lines);
-    }
-
     public ListBusLineResponse findNear(Point point, Distance dist) {
         List<Line> lines = facadeImpl.findNear(point, dist);
         return mapper.mapToListBusLinesResponse(lines);

@@ -161,18 +161,4 @@ public class LinesController {
         return controllerFacade.updateBusLine(lineRequest);
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
-    @ApiResponses({
-            @ApiResponse(code = 201, message = "Created", response = ListBusLineResponse.class),
-            @ApiResponse(code = 400, message = "Bad Request", response = ResponseError.class),
-            @ApiResponse(code = 404, message = "Not found", response = ResponseError.class),
-            @ApiResponse(code = 405, message = "Method not Allowed", response = ResponseError.class),
-            @ApiResponse(code = 500, message = "Internal server error", response = ResponseError.class)
-    })
-    @ApiOperation(value = "Save all buses from DataPOA")
-    @PostMapping("/saveAll")
-    public ListBusLineResponse saveAll() {
-        return controllerFacade.saveAll();
-    }
-
 }

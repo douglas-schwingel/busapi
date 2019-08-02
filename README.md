@@ -41,8 +41,11 @@ DataPOA based bus API
 ------------
 
 # Running the Application
+Application will automatically populate the database when start-up is finished. 
 
-###Requeriments:
+If the application is re-run, It will check if the bus line already exists and save only new ones.
+
+### Requeriments:
 
 	 Docker
 	 Java 11
@@ -52,7 +55,7 @@ Using mongo's docker image:
 
 > docker run -d --name mongodb -p 27017:27017 mongo
 
-######If you want to keep your data, run with volume using
+###### If you want to keep your data, run with volume using
 > docker run -d --name mongodb -v ~your-local-dir:/data/db -p 27017:27017 mongo
 
 ##### 2. Running the application
@@ -156,36 +159,81 @@ When SonarQube is ready:
 
 - POST - Insert new Bus Line
 
-    - Request Body:
-    ```json
-    "id": 5566,
-      "coordinates": [
-        [
-          -30.124190568328,
-          -51.223783133554
-        ],
-        [
-          **More coordinates**
-        ]
+> http://localhost:8080/line-service/v1/lines
+
+ Request Body:    
+ 
+```json
+{
+   "id": 5566,
+   "coordinates": [
+      [
+         -30.124190568328,
+         -51.223783133554
       ],
-      "codigo": "266-1",
-      "nome": "VILA_NOVA"
-    ```
-    - Response:
-    ```json
-        {
-           "id": 5566,
-           "codigo": "266-1",
-           "nome": "VILA_NOVA"
-        }  
-    ```
-        
+      [
+         **More coordinates**
+      ]
+   ],
+   "codigo": "266-1",
+   "nome": "VILA_NOVA"
+}
+```
+Response:
+```json
+{
+   "id": 5566,
+   "codigo": "266-1",
+   "nome": "VILA_NOVA"
+}  
+```
+
   
 - PUT - Update a bus line
+
+>http://localhost:8080/line-service/v1/lines
+
+    
+*Will completely update de line with the new data*
+    
+    
+Request Body:
+
+```json
+{
+   "id": 5566,
+   "coordinates": [
+      [
+         -30.124190568328,
+         -51.223783133554
+      ],
+      [
+         **More coordinates**
+      ]
+   ],
+   "codigo": "266-1",
+   "nome": "VILA_NOVA"
+}
+```
+
+Response:
+```json
+{
+   "id": 5566,
+   "codigo": "266-1",
+   "nome": "VILA_NOVA"
+}  
+```
+
+- DELETE - Delete a bus line
+> http://localhost:8080/line-service/v1/lines/1704
+
+    - Status 204 - If the line was successfully deleted
 
 
 - GET - Get single bus line by Id
 >http://localhost:8080/line-service/v1/lines/5566
+
 
 ```json
 {
@@ -302,4 +350,29 @@ When SonarQube is ready:
 }
 ```
 
+- GET - Find buses in range using latitude and longitude
 
+> http://localhost:8080/line-service/v1/lines/find_near?distance=0.05&lat=-30.146200568328&lng=-51.214993133554
+
+-Parameters:
+
+	distance(double) -> Range in Kilometers (Km)
+	lat(double) -> Latitude (Must be within Porto Alegre territory)
+	lng(double -> Longitude (Must be within Porto Alegre territory)
+	
+```json
+{
+  "lines": [
+    {
+      "id": 5486,
+      "codigo": "T11-2",
+      "nome": "3-A_PERIMETRAL"
+    },
+    {
+      "id": 5810,
+      "codigo": "GT11-2",
+      "nome": "GREVE_T11"
+    }
+  ]
+}
+```

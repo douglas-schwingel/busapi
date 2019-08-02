@@ -28,19 +28,21 @@ public class LinesService {
         this.repository = repository;
     }
 
-
-    public List<Line> saveAll(List<Line> allLines, LinesOperations operations,
+    public void saveAll(List<Line> allLines, LinesOperations operations,
                               LineValidation validation, SaveThread thread, Semaphore semaphore) {
         allLines.forEach(l -> {
-            try {
-                semaphore.acquire();
-                thread.execSaveInNewThread(operations, repository, validation, semaphore, l);
-            } catch (InterruptedException e) {
-                log.error("Error during save operation: {}", e.getMessage(), e);
-                Thread.currentThread().interrupt();
+            if(repository.findById(l.getId()) == null) {
+                try {
+                    semaphore.acquire();
+                    thread.execSaveInNewThread(operations, repository, validation, semaphore, l);
+                } catch (InterruptedException e) {
+                    log.error("Error during save operation: {}", e.getMessage(), e);
+                    Thread.currentThread().interrupt();
+                }
+            } else {
+                log.info(String.format("Line with id %d already exists", l.getId()));
             }
         });
-        return allLines;
     }
 
     public List<Line> findNear(Point point, Distance dist) {
