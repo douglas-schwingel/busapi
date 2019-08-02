@@ -1,4 +1,4 @@
-package br.com.busapi.contract.v1.lines.facade;
+package br.com.busapi.contract.v1.lines.controller.facade;
 
 import br.com.busapi.contract.v1.lines.mapper.LinesMapper;
 import br.com.busapi.contract.v1.lines.models.request.LineRequest;

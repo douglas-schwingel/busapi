@@ -67,7 +67,7 @@ Open a terminal on the source folder of the application and run:
 
 # Requests samples
 
-- Get all bus lines unpaged:
+- GET - Get all bus lines unpaged:
 > http://localhost:8080/line-service/v1/lines
 
 ```json
@@ -97,7 +97,7 @@ Open a terminal on the source folder of the application and run:
 }
 ```
 
-- Get all bus lines with pagination:
+- GET - Get all bus lines with pagination:
 >http://localhost:8080/line-service/v1/lines?page=0&size=15
 
 -Parameters:
@@ -142,7 +142,27 @@ Open a terminal on the source folder of the application and run:
   "empty": false
 }
 ```
-- Get single bus line by Id
+
+- POST - Insert new Bus Line
+
+    - Request Body:
+    ```json
+    "id": 5566,
+      "coordinates": [
+        [
+          -30.124190568328,
+          -51.223783133554
+        ],
+        [
+          **More coordinates**
+        ]
+      ],
+      "codigo": "266-1",
+      "nome": "VILA_NOVA"
+    ```
+  
+
+- GET - Get single bus line by Id
 >http://localhost:8080/line-service/v1/lines/5566
 
 ```json
@@ -162,7 +182,7 @@ Open a terminal on the source folder of the application and run:
 }
 ```
 
-- Get single bus line by Code
+- GET - Get single bus line by Code
 
 >http://localhost:8080/line-service/v1/lines/code/266-1
 
@@ -183,7 +203,7 @@ Open a terminal on the source folder of the application and run:
 }
 ```
 
-- Search line by name (If the contains the passed string)
+- GET - Search line by name (If the contains the passed string)
 
 >http://localhost:8080/line-service/v1/lines/name/ipiranga
 

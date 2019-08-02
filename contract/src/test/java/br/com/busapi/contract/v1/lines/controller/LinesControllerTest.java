@@ -1,6 +1,6 @@
 package br.com.busapi.contract.v1.lines.controller;
 
-import br.com.busapi.contract.v1.lines.facade.LinesControllerFacade;
+import br.com.busapi.contract.v1.lines.controller.facade.LinesControllerFacade;
 import br.com.busapi.contract.v1.lines.mapper.LinesMapper;
 import br.com.busapi.contract.v1.lines.models.request.LineRequest;
 import br.com.busapi.contract.v1.lines.models.response.BusLineResponse;

@@ -16,16 +16,12 @@ import java.util.List;
 @Generated
 public class Line {
 
-    @ApiModelProperty(example = "5566")
     private Integer id;
-    @ApiModelProperty(example = "344-2")
     @JsonProperty("codigo")
     private String code;
-    @ApiModelProperty(example = "SANTA_MARIA")
     @JsonProperty("nome")
     private String name;
     @Singular
-    @JsonProperty("coordenadas")
     @GeoSpatialIndexed
     private List<Double[]> coordinates;
 

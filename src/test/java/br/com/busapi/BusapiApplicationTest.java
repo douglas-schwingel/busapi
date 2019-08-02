@@ -38,7 +38,7 @@ public class BusapiApplicationTest {
     private static final String JSON = "application/json";
     private static final String BASE_RESOURCE = "line-service/v1/lines";
     private static final String MESSAGE_PATH = "errors[0].message";
-    private static int count = 0;
+    private static boolean first = true;
 
     @LocalServerPort
     private int springPort;
@@ -46,17 +46,17 @@ public class BusapiApplicationTest {
     @Before
     public void setUp() throws IOException {
         RestAssured.port = this.springPort;
-        if(count == 0) {
+        if(first) {
             String ip = "localhost";
             int port = 37017;
 
             MongoTemplate mongoTemplate = new MongoTemplate(new MongoClient(ip, port), "test");
-            File file = new ClassPathResource("prefil.json").getFile();
+            File file = new ClassPathResource("prefill.json").getFile();
 
             List<Line> lines = new ObjectMapper().readValue(file, new TypeReference<List<Line>>() {
             });
             mongoTemplate.insertAll(lines);
-            count++;
+            first = false;
         }
     }
 
