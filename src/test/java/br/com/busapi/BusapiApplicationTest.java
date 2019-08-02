@@ -4,6 +4,9 @@ import br.com.busapi.contract.v1.lines.models.request.LineRequest;
 import br.com.busapi.contract.v1.lines.models.response.BusLineResponse;
 import br.com.busapi.contract.v1.lines.models.response.BusLinetinerary;
 import br.com.busapi.impl.lines.models.Line;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mongodb.MongoClient;
 import io.restassured.RestAssured;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.path.json.JsonPath;
@@ -12,9 +15,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import static io.restassured.RestAssured.given;
@@ -31,13 +38,26 @@ public class BusapiApplicationTest {
     private static final String JSON = "application/json";
     private static final String BASE_RESOURCE = "line-service/v1/lines";
     private static final String MESSAGE_PATH = "errors[0].message";
+    private static int count = 0;
 
     @LocalServerPort
     private int springPort;
 
     @Before
-    public void setUp() {
+    public void setUp() throws IOException {
         RestAssured.port = this.springPort;
+        if(count == 0) {
+            String ip = "localhost";
+            int port = 37017;
+
+            MongoTemplate mongoTemplate = new MongoTemplate(new MongoClient(ip, port), "test");
+            File file = new ClassPathResource("prefil.json").getFile();
+
+            List<Line> lines = new ObjectMapper().readValue(file, new TypeReference<List<Line>>() {
+            });
+            mongoTemplate.insertAll(lines);
+            count++;
+        }
     }
 
     @Test
@@ -55,7 +75,7 @@ public class BusapiApplicationTest {
         List<BusLineResponse> list = jsonPath.getObject("content", new TypeRef<List<BusLineResponse>>() {
         });
 
-        assertTrue(list.size() > 980);
+        assertTrue(list.size() >= 15);
     }
 
     @Test
@@ -290,7 +310,7 @@ public class BusapiApplicationTest {
 
         BusLinetinerary response = jsonPath.getObject("$", BusLinetinerary.class);
         assertEquals(lineId, response.getId());
-        assertEquals("SANTA_MARIA", response.getName());
+        assertEquals("AGRONOMIA-UFRGS", response.getName());
     }
 
     @Test

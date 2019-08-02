@@ -43,8 +43,10 @@ DataPOA based bus API
 # Running the Application
 
 ###Requeriments:
+
 	 Docker
 	 Java 11
+	 
 ##### 1. Running MongoDB
 Using mongo's docker image:
 

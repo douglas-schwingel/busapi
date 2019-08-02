@@ -1,0 +1,167 @@
+[
+  {
+    "id": 5795,
+    "codigo": "A74-2",
+    "nome": "ALIMENTADORA_CANTA_GALO-EXTREMA",
+    "coordenadas": [
+      [
+        -30.1,
+        -51.5
+      ]
+    ]
+  },
+  {
+    "id": 5794,
+    "codigo": "A74-1",
+    "nome": "ALIMENTADORA_CANTA_GALO-EXTREMA",
+    "coordenadas": [
+      [
+        -30.1,
+        -51.5
+      ]
+    ]
+  },
+  {
+    "id": 5129,
+    "codigo": "3973-2",
+    "nome": "BONSUCESSO_-_VIA_IPIRANGA",
+    "coordenadas": [
+      [
+        -30.1,
+        -51.5
+      ]
+    ]
+  },
+  {
+    "id": 5112,
+    "codigo": "343-1",
+    "nome": "CAMPUS_-_IPIRANGA",
+    "coordenadas": [
+      [
+        -30.1,
+        -51.5
+      ]
+    ]
+  },
+  {
+    "id": 5601,
+    "codigo": "348-1",
+    "nome": "JARDIM_BENTO_GONCALVES",
+    "coordenadas": [
+      [
+        -30.1,
+        -51.5
+      ]
+    ]
+  },
+  {
+    "id": 5339,
+    "codigo": "R31-2",
+    "nome": "RAPIDA_-_BENTO",
+    "coordenadas": [
+      [
+        -30.1,
+        -51.5
+      ]
+    ]
+  },
+  {
+    "id": 5338,
+    "codigo": "R31-1",
+    "nome": "RAPIDA_-_BENTO",
+    "coordenadas": [
+      [
+        -30.1,
+        -51.5
+      ]
+    ]
+  },
+  {
+    "id": 5098,
+    "codigo": "2832-2",
+    "nome": "IPANEMA-CAVALHADA-CIRINO_PRUNES",
+    "coordenadas": [
+      [
+        -30.1,
+        -51.5
+      ]
+    ]
+  },
+  {
+    "id": 5050,
+    "codigo": "2675-1",
+    "nome": "LAMI_ATE_CAVALHADA",
+    "coordenadas": [
+      [
+        -30.146200568328,
+        -51.214993133554
+      ]
+    ]
+  },
+  {
+    "id": 5318,
+    "codigo": "E30-1",
+    "nome": "FIERGS-ASSIS_BRASIL",
+    "coordenadas": [
+      [
+        -30.1,
+        -51.5
+      ]
+    ]
+  },
+  {
+    "id": 5319,
+    "codigo": "E30-2",
+    "nome": "FIERGS-ASSIS_BRASIL",
+    "coordenadas": [
+      [
+        -30.1,
+        -51.5
+      ]
+    ]
+  },
+  {
+    "id": 5566,
+    "codigo": "264-1",
+    "nome": "SANTA_MARIA",
+    "coordenadas": [
+      [
+        -30.1,
+        -51.5
+      ]
+    ]
+  },
+  {
+    "id": 5586,
+    "codigo": "3752-1",
+    "nome": "AGRONOMIA-UFRGS",
+    "coordenadas": [
+      [
+        -30.146200568328,
+        -51.214993133554
+      ]
+    ]
+  },
+  {
+    "id": 5660,
+    "codigo": "3752-2",
+    "nome": "AGRONOMIA-UFRGS",
+    "coordenadas": [
+      [
+        -30.1,
+        -51.5
+      ]
+    ]
+  },
+  {
+    "id": 1704,
+    "codigo": "M170-4",
+    "nome": "VIAMAO",
+    "coordenadas": [
+      [
+        -30.146200568328,
+        -51.214993133554
+      ]
+    ]
+  }
+]

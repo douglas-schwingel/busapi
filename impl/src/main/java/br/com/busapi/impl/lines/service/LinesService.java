@@ -53,7 +53,7 @@ public class LinesService {
 
     public Page<Line> findAll(Pageable pageable) {
         Page<Line> page = repository.findAll(pageable);
-        if (page.getTotalPages() - 1 < page.getNumber() && pageable.isPaged()) {
+        if (page.getTotalPages() < page.getNumber() && pageable.isPaged()) {
             throw new ApiException(StandardError.builder()
                     .status(HttpStatus.BAD_REQUEST.value())
                     .name(HttpStatus.BAD_REQUEST.name())
