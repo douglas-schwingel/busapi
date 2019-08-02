@@ -21,6 +21,7 @@ public class Line {
     private String code;
     @JsonProperty("nome")
     private String name;
+    @JsonProperty("coordenadas")
     @Singular
     @GeoSpatialIndexed
     private List<Double[]> coordinates;

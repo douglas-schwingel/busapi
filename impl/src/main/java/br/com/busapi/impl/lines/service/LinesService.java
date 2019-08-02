@@ -85,7 +85,14 @@ public class LinesService {
     }
 
     public Line findByCode(String code) {
-        return repository.findByCode(code);
+        return repository.findByCode(code).orElseThrow(() -> new ApiException(StandardError.builder()
+                .status(HttpStatus.NOT_FOUND.value())
+                .name(HttpStatus.NOT_FOUND.name())
+                .message(String.format("No bus line with the code %s", code))
+                .issue(new Issue(new IllegalArgumentException("No bus line found for code " + code)))
+                .suggestedApplicationAction("Create verification before sending the request")
+                .suggestedUserAction("Verify the page number and try again")
+                .build()));
     }
 
 

@@ -19,6 +19,7 @@ import org.springframework.data.geo.Metrics;
 import org.springframework.data.geo.Point;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.Semaphore;
 
 import static org.junit.Assert.*;
@@ -118,7 +119,7 @@ public class LinesServiceTest {
     public void mustReturnTheRightLineForRecievedCode() {
         String code = "109-5";
         Line byCode = utils.getByCode(code);
-        when(repository.findByCode(code)).thenReturn(byCode);
+        when(repository.findByCode(code)).thenReturn(Optional.of(byCode));
 
         Line line = service.findByCode(code);
 

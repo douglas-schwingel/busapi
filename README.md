@@ -63,6 +63,17 @@ Open a terminal on the source folder of the application and run:
 
 > http://localhost:8080/swagger-ui.html
 
+##### Optional: SonarQube
+
+Run sonarqube on port 9000
+> docker run -d --name sonarqube -p 9000:9000 sonarqube
+
+When SonarQube is ready:
+
+> ./gradlew sonarqube
+
+> http://localhost:9000
+
 ------------
 
 # Requests samples
@@ -279,3 +290,5 @@ Open a terminal on the source folder of the application and run:
   ]
 }
 ```
+
+

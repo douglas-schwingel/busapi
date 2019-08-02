@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface LinesRepository extends MongoRepository<Line, String> {
@@ -17,5 +18,5 @@ public interface LinesRepository extends MongoRepository<Line, String> {
 
     List<Line> findAllByNameContains(String name);
 
-    Line findByCode(String code);
+    Optional<Line> findByCode(String code);
 }
