@@ -54,14 +54,14 @@ public class LinesRandomizer {
     }
 
     private Double rngLat() {
-        Double min = -30.261371;
-        Double max = -29.954468;
+        Double min = -30.25;
+        Double max = -29.994468;
         return min + (max - min) * new SecureRandom().nextDouble();
     }
 
     private Double rngLgn() {
-        Double min = -51.266828;
-        Double max = -51.087028;
+        Double min = -51.25;
+        Double max = -51.09;
         return min + (max - min) * new SecureRandom().nextDouble();
     }
 

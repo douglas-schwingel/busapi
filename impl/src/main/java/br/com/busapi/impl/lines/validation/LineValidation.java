@@ -4,7 +4,6 @@ import br.com.busapi.impl.exception.ApiException;
 import br.com.busapi.impl.exception.errors.StandardError;
 import br.com.busapi.impl.exception.issues.Issue;
 import br.com.busapi.impl.lines.models.Line;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 

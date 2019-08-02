@@ -83,6 +83,17 @@ public class LineValidationTest {
 
     }
 
+    @Test
+    public void shouldThrowApiExceptionForCoordinateWithoutLng() {
+        Line random = utils.getRandom();
+        random.setCoordinates(Collections.singletonList(new Double[]{30.0}));
+        exception.expect(ApiException.class);
+        exception.expectMessage("Invalid coordinate: Coordinates must be within Porto Alegre's territory");
+
+        validation.coordinatesAreValid(random.getCoordinates());
+
+    }
+
 
     @Test
     public void mustReturnFalseForEachNullField() {
