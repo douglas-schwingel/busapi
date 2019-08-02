@@ -159,6 +159,8 @@ When SonarQube is ready:
 
 - POST - Insert new Bus Line
 
+(Coordinates must be within Porto Alegre's territory)
+
 > http://localhost:8080/line-service/v1/lines
 
  Request Body:    
@@ -357,8 +359,8 @@ Response:
 -Parameters:
 
 	distance(double) -> Range in Kilometers (Km)
-	lat(double) -> Latitude (Must be within Porto Alegre territory)
-	lng(double -> Longitude (Must be within Porto Alegre territory)
+	lat(double) -> Latitude
+	lng(double -> Longitude
 	
 ```json
 {
