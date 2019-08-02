@@ -157,12 +157,7 @@ public class LinesControllerTest {
     }
 
     private LineRequest getRandomLineRequest(Line random) {
-        return LineRequest.builder()
-                .id(random.getId())
-                .nome(random.getName())
-                .codigo(random.getCode())
-                .coordenadas(random.getCoordinates())
-                .build();
+         return new LineRequest(random.getId(), random.getCode(), random.getName(), random.getCoordinates());
     }
 
 

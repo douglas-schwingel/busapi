@@ -13,9 +13,7 @@ import io.restassured.path.json.JsonPath;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -24,6 +22,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 
 import static io.restassured.RestAssured.given;
@@ -147,12 +146,8 @@ public class BusapiApplicationTest {
     @Test
     public void mustSaveTheNewBusLineAndThenDelete() {
         Integer lineId = 1093;
-        LineRequest lineRequest = LineRequest.builder()
-                .id(lineId)
-                .codigo("109-3")
-                .nome("VIAMAO")
-                .coordenada(new Double[]{-30.1, -51.1})
-                .build();
+        List<Double[]> coordenadas = Collections.singletonList(new Double[]{-30.1, -51.1});
+        LineRequest lineRequest = new LineRequest(lineId, "109-3", "VIAMAO", coordenadas);
 
         JsonPath jsonPath =
                 given()
@@ -275,12 +270,8 @@ public class BusapiApplicationTest {
     @Test
     public void mustUpdateLineSuccessfully() {
         Integer lineId = 1704;
-        LineRequest lineRequest = LineRequest.builder()
-                .id(lineId)
-                .codigo("M170-4")
-                .nome("VIAMAO")
-                .coordenada(new Double[]{-30.146200568328, -51.214993133554})
-                .build();
+        List<Double[]> coordenadas = Collections.singletonList(new Double[]{-30.146200568328, -51.214993133554});
+        LineRequest lineRequest = new LineRequest(lineId, "M170-4", "VIAMAO", coordenadas);
 
         JsonPath jsonPath = given()
                             .header(ACCEPT, JSON)

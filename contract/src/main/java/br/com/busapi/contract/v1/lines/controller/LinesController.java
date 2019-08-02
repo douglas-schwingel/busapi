@@ -121,7 +121,7 @@ public class LinesController {
 
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses({
-            @ApiResponse(code = 201, message = "OK", response = BusLinetinerary.class),
+            @ApiResponse(code = 200, message = "OK", response = BusLinetinerary.class),
             @ApiResponse(code = 400, message = "Bad Request", response = ResponseError.class),
             @ApiResponse(code = 404, message = "Not found", response = ResponseError.class),
             @ApiResponse(code = 405, message = "Method not Allowed", response = ResponseError.class),
