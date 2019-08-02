@@ -171,7 +171,18 @@ When SonarQube is ready:
       "codigo": "266-1",
       "nome": "VILA_NOVA"
     ```
+    - Response:
+    ```json
+        {
+           "id": 5566,
+           "codigo": "266-1",
+           "nome": "VILA_NOVA"
+        }  
+    ```
+        
   
+- PUT - Update a bus line
+
 
 - GET - Get single bus line by Id
 >http://localhost:8080/line-service/v1/lines/5566
