@@ -3,6 +3,12 @@ DataPOA based bus API
 
 ------------
 
+### Why Spring?
+
+- Starter-Web: Auto-configuration with simple custimization, embedded Tomcat server and all Spring's amazing magical features
+- Data Mongo: Encapsulates the complexity of creating json codecs, queries and database connections.
+- Actuator: Used for monitoring beans, endpoints and health of the application
+- Starter-Test: Provides a complete Spring test environment
 
 ### Why MongoDb?
 
