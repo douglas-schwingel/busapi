@@ -19,14 +19,14 @@ import java.util.Map;
 @ControllerAdvice
 public class MyExceptionHandler {
 
-    private static final String PT_BR = "pt-BR";
+    private static final String EN_US = "en-US";
     private static final String LOG_MESSAGE = "Exception: {}";
 
     @ExceptionHandler(ApiException.class)
     public ResponseEntity<ResponseError> apiException(ApiException exception, HttpServletRequest request) {
         log.error(LOG_MESSAGE,exception.getMessage(), exception);
         return ResponseEntity.status(exception.getErrors().get(0).getStatus())
-                .body(new ResponseError(request.getRequestURI(), PT_BR, exception.getErrors()));
+                .body(new ResponseError(request.getRequestURI(), EN_US, exception.getErrors()));
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
@@ -43,7 +43,7 @@ public class MyExceptionHandler {
         log.error(LOG_MESSAGE, error.getMessage(), exception);
         return new ResponseEntity<>(ResponseError.builder()
                 .namespace(request.getRequestURI())
-                .language(PT_BR)
+                .language(EN_US)
                 .error(error).build()
                 , HttpStatus.METHOD_NOT_ALLOWED);
     }
@@ -65,7 +65,7 @@ public class MyExceptionHandler {
         log.error(LOG_MESSAGE, error.getMessage(), exception);
         return new ResponseEntity<>(ResponseError.builder()
                 .namespace(request.getRequestURI())
-                .language(PT_BR)
+                .language(EN_US)
                 .error(error).build()
                 , HttpStatus.BAD_REQUEST);
     }
@@ -84,7 +84,7 @@ public class MyExceptionHandler {
         );
         log.error(LOG_MESSAGE,exception.getMessage(), exception);
         return ResponseEntity.status(apiException.getErrors().get(0).getStatus())
-                .body(new ResponseError(request.getRequestURI(), PT_BR, apiException.getErrors()));
+                .body(new ResponseError(request.getRequestURI(), EN_US, apiException.getErrors()));
     }
 
 }

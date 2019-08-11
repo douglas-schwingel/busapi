@@ -7,6 +7,7 @@ import br.com.busapi.contract.v1.lines.models.response.BusLinetinerary;
 import br.com.busapi.contract.v1.lines.models.response.ListBusLineResponse;
 import br.com.busapi.impl.lines.facade.LinesFacadeImpl;
 import br.com.busapi.impl.lines.models.Line;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.geo.Distance;
@@ -16,36 +17,31 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class LinesControllerFacade {
 
-    private final LinesMapper mapper;
     private final LinesFacadeImpl facadeImpl;
-
-    public LinesControllerFacade(LinesMapper mapper, LinesFacadeImpl linesFacade) {
-        this.facadeImpl = linesFacade;
-        this.mapper = mapper;
-    }
 
     public ListBusLineResponse findNear(Point point, Distance dist) {
         List<Line> lines = facadeImpl.findNear(point, dist);
-        return mapper.mapToListBusLinesResponse(lines);
+        return LinesMapper.mapToListBusLinesResponse(lines);
     }
 
     public ListBusLineResponse findByName(String name) {
-        return mapper.mapToListBusLinesResponse(facadeImpl.findByName(name));
+        return LinesMapper.mapToListBusLinesResponse(facadeImpl.findByName(name));
     }
 
     public Page<BusLineResponse> findAll(Pageable pageable) {
-        return facadeImpl.findAll(pageable).map(mapper::mapToBusLineResponse);
+        return facadeImpl.findAll(pageable).map(LinesMapper::mapToBusLineResponse);
     }
 
     public BusLineResponse saveOne(LineRequest lineRequest) {
-        Line line = mapper.mapToLine(lineRequest);
-        return mapper.mapToBusLineResponse(facadeImpl.saveOne(line));
+        Line line = LinesMapper.mapToLine(lineRequest);
+        return LinesMapper.mapToBusLineResponse(facadeImpl.saveOne(line));
     }
 
     public BusLinetinerary findById(Integer id) {
-        return mapper.mapToBusLineItinerary(facadeImpl.findById(id));
+        return LinesMapper.mapToBusLineItinerary(facadeImpl.findById(id));
     }
 
     public void deleteLine(Integer id) {
@@ -53,11 +49,11 @@ public class LinesControllerFacade {
     }
 
     public BusLineResponse updateBusLine(LineRequest lineRequest) {
-        Line line = mapper.mapToLine(lineRequest);
-        return mapper.mapToBusLineResponse(facadeImpl.updateLine(line));
+        Line line = LinesMapper.mapToLine(lineRequest);
+        return LinesMapper.mapToBusLineResponse(facadeImpl.updateLine(line));
     }
 
     public BusLinetinerary findByCode(String code) {
-        return mapper.mapToBusLineItinerary(facadeImpl.findByCode(code));
+        return LinesMapper.mapToBusLineItinerary(facadeImpl.findByCode(code));
     }
 }

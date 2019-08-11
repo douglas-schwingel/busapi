@@ -2,6 +2,7 @@ package br.com.busapi.impl.lines.facade;
 
 import br.com.busapi.impl.exception.ApiException;
 import br.com.busapi.impl.exception.errors.StandardError;
+import br.com.busapi.impl.exception.exceptions.LineNotFoundException;
 import br.com.busapi.impl.exception.issues.Issue;
 import br.com.busapi.impl.lines.integration.LinesOperations;
 import br.com.busapi.impl.lines.models.Line;
@@ -9,6 +10,8 @@ import br.com.busapi.impl.lines.service.LinesService;
 import br.com.busapi.impl.lines.service.SaveThread;
 import br.com.busapi.impl.lines.validation.LineValidation;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -28,26 +31,23 @@ import java.util.concurrent.Semaphore;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 @EnableScheduling
 public class LinesFacadeImpl {
 
     private final LinesService service;
     private final LinesOperations operations;
-    private LineValidation validation;
+    private final LineValidation validation;
+    private final ObjectMapper objectMapper;
+    private final RestTemplate restTemplate;
 
     @Value("${app.isRealApplication}")
     private boolean isRealApplication;
 
-    public LinesFacadeImpl(LinesService service, LinesOperations operations, LineValidation validation) {
-        this.service = service;
-        this.operations = operations;
-        this.validation = validation;
-    }
-
     @EventListener(ApplicationReadyEvent.class)
     public void saveAll() {
         if (isRealApplication){
-            List<Line> allLines = operations.listBusLines(new RestTemplate(), new ObjectMapper());
+            List<Line> allLines = operations.listBusLines(restTemplate, objectMapper);
             service.saveAll(allLines, operations, validation, new SaveThread(), new Semaphore(2));
         }
     }
@@ -90,7 +90,7 @@ public class LinesFacadeImpl {
     public Line findById(Integer id) {
         Line line = service.findById(id);
         if (line == null) {
-            throw invalidDataApiException("No registered line with id: " + id, "Unregistered id",
+            throw notFound("No registered line with id: " + id, "Unregistered id",
                     "Create verification before sending the request", "Verify the informed id and try again");
         }
         return line;
@@ -99,7 +99,7 @@ public class LinesFacadeImpl {
     public void deleteLine(Integer id) {
         Line lineToBeDeleted = service.findById(id);
         if (!service.deleteLine(lineToBeDeleted)) {
-            throw invalidDataApiException("No line with the id " + id, "Invalid line id",
+            throw invalidDataApiException("No line to be deleted with the id " + id, "Invalid line id",
                     "Contact us for more informations.", "Verify the id and try again.");
         }
     }
@@ -110,6 +110,17 @@ public class LinesFacadeImpl {
                 .message(exceptionMessage)
                 .name(HttpStatus.BAD_REQUEST.name())
                 .issue(new Issue(new IllegalArgumentException(issueMessage)))
+                .suggestedApplicationAction(appAction)
+                .suggestedUserAction(userAction)
+                .build());
+    }
+
+    private ApiException notFound(String exceptionMessage, String issueMessage, String appAction, String userAction) {
+        return new ApiException(StandardError.builder()
+                .status(HttpStatus.NOT_FOUND.value())
+                .message(exceptionMessage)
+                .name(HttpStatus.NOT_FOUND.name())
+                .issue(new Issue(new LineNotFoundException(issueMessage)))
                 .suggestedApplicationAction(appAction)
                 .suggestedUserAction(userAction)
                 .build());

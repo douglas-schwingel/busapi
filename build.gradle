@@ -51,7 +51,6 @@ apply plugin: 'org.springframework.boot'
 
 dependencies {
 	implementation project(':contract')
-	implementation project(':impl')
 	testImplementation 'io.rest-assured:rest-assured:4.0.0'
 	testImplementation 'io.rest-assured:json-path:4.0.0'
 	testImplementation 'io.rest-assured:xml-path:4.0.0'

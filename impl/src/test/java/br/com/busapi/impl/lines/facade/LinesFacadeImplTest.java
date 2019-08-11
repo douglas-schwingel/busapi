@@ -6,6 +6,7 @@ import br.com.busapi.impl.lines.models.Line;
 import br.com.busapi.impl.lines.service.LinesService;
 import br.com.busapi.impl.lines.utils.LinesRandomizer;
 import br.com.busapi.impl.lines.validation.LineValidation;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.geo.Distance;
 import org.springframework.data.geo.Point;
 import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -40,7 +42,7 @@ public class LinesFacadeImplTest {
         service = mock(LinesService.class);
         operations = mock(LinesOperations.class);
         validation = mock(LineValidation.class);
-        facade = new LinesFacadeImpl(service, operations, validation);
+        facade = new LinesFacadeImpl(service, operations, validation, new ObjectMapper(), new RestTemplate());
         utils = new LinesRandomizer();
     }
 
@@ -169,7 +171,7 @@ public class LinesFacadeImplTest {
         when(service.findById(random.getId())).thenReturn(random);
         when(service.deleteLine(random)).thenReturn(false);
         exception.expect(ApiException.class);
-        exception.expectMessage("No line with the id " + random.getId());
+        exception.expectMessage("No line to be deleted with the id " + random.getId());
 
         facade.deleteLine(random.getId());
     }

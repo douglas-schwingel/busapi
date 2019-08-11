@@ -173,7 +173,7 @@ public class BusapiApplicationTest {
     }
 
     @Test
-    public void mustReturnBadRequestForInvalidId() {
+    public void mustReturnBadRequestForInvalidIdWhenDeleting() {
         JsonPath jsonPath =
                 given()
                 .expect()
@@ -184,7 +184,7 @@ public class BusapiApplicationTest {
                     .jsonPath();
 
         String message = jsonPath.getObject(MESSAGE_PATH, String.class);
-        assertEquals("No line with the id 1093", message);
+        assertEquals("No line to be deleted with the id 1093", message);
     }
 
     @Test
@@ -307,13 +307,13 @@ public class BusapiApplicationTest {
     }
 
     @Test
-    public void shouldReturnBadRequestForNotExistingId() {
+    public void shouldReturnNotFoundForNotExistindIdWhenGetting() {
         Integer lineId = 1074;
         JsonPath jsonPath =
                 given()
                     .header(ACCEPT, JSON)
                 .expect()
-                    .statusCode(400)
+                    .statusCode(404)
                 .when()
                     .get(BASE_RESOURCE + "/" + lineId)
                 .andReturn()
@@ -336,7 +336,7 @@ public class BusapiApplicationTest {
                     .jsonPath();
 
         String message = jsonPath.getObject(MESSAGE_PATH, String.class);
-        assertEquals("No line with the id " + lineId, message);
+        assertEquals("No line to be deleted with the id " + lineId, message);
     }
 
 

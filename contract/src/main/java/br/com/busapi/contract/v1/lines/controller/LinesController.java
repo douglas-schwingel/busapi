@@ -7,6 +7,7 @@ import br.com.busapi.contract.v1.lines.models.response.BusLinetinerary;
 import br.com.busapi.contract.v1.lines.models.response.ListBusLineResponse;
 import br.com.busapi.impl.exception.errors.ResponseError;
 import io.swagger.annotations.*;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,13 +23,10 @@ import org.springframework.web.bind.annotation.*;
         produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 @RestController
 @RequestMapping("line-service/v1/lines")
+@AllArgsConstructor
 public class LinesController {
 
     private final LinesControllerFacade controllerFacade;
-
-    public LinesController(LinesControllerFacade controllerFacade) {
-        this.controllerFacade = controllerFacade;
-    }
 
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses({

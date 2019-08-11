@@ -17,7 +17,7 @@ public class ResponseError implements Serializable {
 
     @ApiModelProperty(example = "/v2/not_found")
     private String namespace;
-    @ApiModelProperty(example = "pt-BR")
+    @ApiModelProperty(example = "en-US")
     private String language;
     @Singular
     private List<StandardError> errors;

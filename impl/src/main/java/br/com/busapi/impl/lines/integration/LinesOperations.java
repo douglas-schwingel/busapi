@@ -8,6 +8,7 @@ import br.com.busapi.impl.lines.models.Line;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
@@ -20,7 +21,8 @@ import java.util.*;
 @Slf4j
 public class LinesOperations {
 
-    private static final String URI = "http://www.poatransporte.com.br/php/facades/process.php";
+    @Value("${app.apiURI}")
+    private String URI;
 
     public List<Line> listBusLines(RestTemplate template, ObjectMapper mapper) {
         String linesString = template.getForObject(URI + "?a=nc&p=%&t=o", String.class);

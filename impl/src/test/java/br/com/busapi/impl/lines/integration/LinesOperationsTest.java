@@ -10,6 +10,7 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
@@ -33,7 +34,7 @@ public class LinesOperationsTest {
     @Before
     public void setUp() {
         operations = new LinesOperations();
-
+        ReflectionTestUtils.setField(operations, "URI", "http://www.poatransporte.com.br/php/facades/process.php");
         lineTeste = Line.builder()
                 .id(5285)
                 .code("T-Testado")

@@ -12,7 +12,9 @@ import java.util.List;
 @Service
 public class LinesMapper {
 
-    public BusLineResponse mapToBusLineResponse(Line line) {
+    private LinesMapper() {}
+
+    public static BusLineResponse mapToBusLineResponse(Line line) {
         return BusLineResponse.builder()
                 .id(line.getId())
                 .code(line.getCode())
@@ -20,13 +22,13 @@ public class LinesMapper {
     }
 
 
-    public ListBusLineResponse mapToListBusLinesResponse(List<Line> lines) {
+    public static ListBusLineResponse mapToListBusLinesResponse(List<Line> lines) {
         var builder = ListBusLineResponse.builder();
         lines.forEach(l -> builder.line(mapToBusLineResponse(l)));
         return builder.build();
     }
 
-    public BusLinetinerary mapToBusLineItinerary(Line line) {
+    public static BusLinetinerary mapToBusLineItinerary(Line line) {
         return BusLinetinerary.builder()
                 .name(line.getName())
                 .id(line.getId())
@@ -35,7 +37,7 @@ public class LinesMapper {
                 .build();
     }
 
-    public Line mapToLine(LineRequest lineRequest) {
+    public static Line mapToLine(LineRequest lineRequest) {
         return Line.builder()
                 .id(lineRequest.getId())
                 .name(lineRequest.getNome())

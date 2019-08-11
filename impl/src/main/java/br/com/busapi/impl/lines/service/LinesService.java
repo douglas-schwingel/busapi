@@ -7,6 +7,7 @@ import br.com.busapi.impl.lines.integration.LinesOperations;
 import br.com.busapi.impl.lines.models.Line;
 import br.com.busapi.impl.lines.repository.LinesRepository;
 import br.com.busapi.impl.lines.validation.LineValidation;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,14 +20,11 @@ import java.util.List;
 import java.util.concurrent.Semaphore;
 
 @Slf4j
+@AllArgsConstructor
 @Service
 public class LinesService {
 
     private final LinesRepository repository;
-
-    public LinesService(LinesRepository repository) {
-        this.repository = repository;
-    }
 
     public void saveAll(List<Line> allLines, LinesOperations operations,
                               LineValidation validation, SaveThread thread, Semaphore semaphore) {
