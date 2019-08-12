@@ -36,7 +36,7 @@ public class LinesControllerTest {
     @Before
     public void setUp() {
         facadeImpl = mock(LinesFacadeImpl.class);
-        controllerFacade = spy(new LinesControllerFacade(new LinesMapper(), facadeImpl));
+        controllerFacade = spy(new LinesControllerFacade(facadeImpl));
         controller = new LinesController(controllerFacade);
 
     }

@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -39,7 +40,7 @@ public class LinesFacadeImpl {
     private final LinesOperations operations;
     private final LineValidation validation;
     private final ObjectMapper objectMapper;
-    private final RestTemplate restTemplate;
+    private final RestTemplateBuilder restTemplateBuilder;
 
     @Value("${app.isRealApplication}")
     private boolean isRealApplication;
@@ -47,7 +48,7 @@ public class LinesFacadeImpl {
     @EventListener(ApplicationReadyEvent.class)
     public void saveAll() {
         if (isRealApplication){
-            List<Line> allLines = operations.listBusLines(restTemplate, objectMapper);
+            List<Line> allLines = operations.listBusLines(restTemplateBuilder.build(), objectMapper);
             service.saveAll(allLines, operations, validation, new SaveThread(), new Semaphore(2));
         }
     }

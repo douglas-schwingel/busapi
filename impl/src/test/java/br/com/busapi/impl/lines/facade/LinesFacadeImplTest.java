@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -42,7 +43,7 @@ public class LinesFacadeImplTest {
         service = mock(LinesService.class);
         operations = mock(LinesOperations.class);
         validation = mock(LineValidation.class);
-        facade = new LinesFacadeImpl(service, operations, validation, new ObjectMapper(), new RestTemplate());
+        facade = new LinesFacadeImpl(service, operations, validation, new ObjectMapper(), new RestTemplateBuilder());
         utils = new LinesRandomizer();
     }
 
