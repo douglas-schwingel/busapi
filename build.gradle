@@ -55,6 +55,7 @@ apply plugin: 'org.springframework.boot'
 dependencies {
 	implementation project(':contract')
 	implementation 'org.springframework.cloud:spring-cloud-starter-config'
+	implementation 'de.codecentric:spring-boot-admin-starter-client:2.1.5'
 	testImplementation 'io.rest-assured:rest-assured:4.0.0'
 	testImplementation 'io.rest-assured:json-path:4.0.0'
 	testImplementation 'io.rest-assured:xml-path:4.0.0'
