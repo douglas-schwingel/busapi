@@ -3,7 +3,7 @@ package br.com.busapi.contract.v1.lines.controller;
 import br.com.busapi.contract.v1.lines.controller.facade.LinesControllerFacade;
 import br.com.busapi.contract.v1.lines.models.request.LineRequest;
 import br.com.busapi.contract.v1.lines.models.response.BusLineResponse;
-import br.com.busapi.contract.v1.lines.models.response.BusLinetinerary;
+import br.com.busapi.contract.v1.lines.models.response.BusLineItinerary;
 import br.com.busapi.contract.v1.lines.models.response.ListBusLineResponse;
 import br.com.busapi.impl.exception.errors.ResponseError;
 import io.swagger.annotations.*;
@@ -51,7 +51,7 @@ public class LinesController {
 
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses({
-            @ApiResponse(code = 200, message = "OK", response = BusLinetinerary.class),
+            @ApiResponse(code = 200, message = "OK", response = BusLineItinerary.class),
             @ApiResponse(code = 400, message = "Bad Request", response = ResponseError.class),
             @ApiResponse(code = 404, message = "Not found", response = ResponseError.class),
             @ApiResponse(code = 405, message = "Method not Allowed", response = ResponseError.class),
@@ -59,7 +59,7 @@ public class LinesController {
     })
     @ApiOperation(value = "Get line by id", notes = "Find bus line by id")
     @GetMapping("/{id}")
-    public BusLinetinerary findById(@PathVariable
+    public BusLineItinerary findById(@PathVariable
                                     @ApiParam(example = "5566") Integer id) {
         return controllerFacade.findById(id);
     }
@@ -119,7 +119,7 @@ public class LinesController {
 
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses({
-            @ApiResponse(code = 200, message = "OK", response = BusLinetinerary.class),
+            @ApiResponse(code = 200, message = "OK", response = BusLineItinerary.class),
             @ApiResponse(code = 400, message = "Bad Request", response = ResponseError.class),
             @ApiResponse(code = 404, message = "Not found", response = ResponseError.class),
             @ApiResponse(code = 405, message = "Method not Allowed", response = ResponseError.class),
@@ -127,7 +127,7 @@ public class LinesController {
     })
     @ApiOperation(value = "Find bus by code")
     @GetMapping("/code/{code}")
-    public BusLinetinerary findByCode(@PathVariable
+    public BusLineItinerary findByCode(@PathVariable
                                       @ApiParam(example = "264-1") String code) {
         return controllerFacade.findByCode(code);
     }

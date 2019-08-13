@@ -2,7 +2,7 @@ package br.com.busapi.contract.v1.lines.mapper;
 
 import br.com.busapi.contract.v1.lines.models.request.LineRequest;
 import br.com.busapi.contract.v1.lines.models.response.BusLineResponse;
-import br.com.busapi.contract.v1.lines.models.response.BusLinetinerary;
+import br.com.busapi.contract.v1.lines.models.response.BusLineItinerary;
 import br.com.busapi.contract.v1.lines.models.response.ListBusLineResponse;
 import br.com.busapi.impl.lines.models.Line;
 import org.springframework.stereotype.Service;
@@ -28,8 +28,8 @@ public class LinesMapper {
         return builder.build();
     }
 
-    public static BusLinetinerary mapToBusLineItinerary(Line line) {
-        return BusLinetinerary.builder()
+    public static BusLineItinerary mapToBusLineItinerary(Line line) {
+        return BusLineItinerary.builder()
                 .name(line.getName())
                 .id(line.getId())
                 .code(line.getCode())

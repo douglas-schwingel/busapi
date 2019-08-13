@@ -1,10 +1,9 @@
 package br.com.busapi.contract.v1.lines.controller;
 
 import br.com.busapi.contract.v1.lines.controller.facade.LinesControllerFacade;
-import br.com.busapi.contract.v1.lines.mapper.LinesMapper;
 import br.com.busapi.contract.v1.lines.models.request.LineRequest;
 import br.com.busapi.contract.v1.lines.models.response.BusLineResponse;
-import br.com.busapi.contract.v1.lines.models.response.BusLinetinerary;
+import br.com.busapi.contract.v1.lines.models.response.BusLineItinerary;
 import br.com.busapi.contract.v1.lines.models.response.ListBusLineResponse;
 import br.com.busapi.impl.lines.facade.LinesFacadeImpl;
 import br.com.busapi.impl.lines.models.Line;
@@ -78,7 +77,7 @@ public class LinesControllerTest {
         Line random = utils.getRandom();
         when(facadeImpl.findById(random.getId())).thenReturn(random);
 
-        BusLinetinerary response = controller.findById(random.getId());
+        BusLineItinerary response = controller.findById(random.getId());
         verify(controllerFacade, times(1)).findById(random.getId());
 
         assertEquals(random.getId(), response.getId());
@@ -119,7 +118,7 @@ public class LinesControllerTest {
         Line random = utils.getRandom();
         when(facadeImpl.findByCode(random.getCode())).thenReturn(random);
 
-        BusLinetinerary response = controller.findByCode(random.getCode());
+        BusLineItinerary response = controller.findByCode(random.getCode());
         verify(controllerFacade, times(1)).findByCode(random.getCode());
 
         assertEquals(random.getCode(), response.getCode());

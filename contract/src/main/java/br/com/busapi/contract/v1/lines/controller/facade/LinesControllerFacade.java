@@ -3,7 +3,7 @@ package br.com.busapi.contract.v1.lines.controller.facade;
 import br.com.busapi.contract.v1.lines.mapper.LinesMapper;
 import br.com.busapi.contract.v1.lines.models.request.LineRequest;
 import br.com.busapi.contract.v1.lines.models.response.BusLineResponse;
-import br.com.busapi.contract.v1.lines.models.response.BusLinetinerary;
+import br.com.busapi.contract.v1.lines.models.response.BusLineItinerary;
 import br.com.busapi.contract.v1.lines.models.response.ListBusLineResponse;
 import br.com.busapi.impl.lines.facade.LinesFacadeImpl;
 import br.com.busapi.impl.lines.models.Line;
@@ -40,7 +40,7 @@ public class LinesControllerFacade {
         return LinesMapper.mapToBusLineResponse(facadeImpl.saveOne(line));
     }
 
-    public BusLinetinerary findById(Integer id) {
+    public BusLineItinerary findById(Integer id) {
         return LinesMapper.mapToBusLineItinerary(facadeImpl.findById(id));
     }
 
@@ -53,7 +53,7 @@ public class LinesControllerFacade {
         return LinesMapper.mapToBusLineResponse(facadeImpl.updateLine(line));
     }
 
-    public BusLinetinerary findByCode(String code) {
+    public BusLineItinerary findByCode(String code) {
         return LinesMapper.mapToBusLineItinerary(facadeImpl.findByCode(code));
     }
 }

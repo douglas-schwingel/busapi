@@ -33,7 +33,7 @@ allprojects {
 	dependencyManagement {
 		imports {
 			mavenBom SpringBootPlugin.BOM_COORDINATES
-			mavenBom "org.springframework.cloud:spring-cloud-dependencies:${'Greenwich.SR2'}"
+			mavenBom 'org.springframework.cloud:spring-cloud-dependencies:Greenwich.SR2'
 
 		}
 	}

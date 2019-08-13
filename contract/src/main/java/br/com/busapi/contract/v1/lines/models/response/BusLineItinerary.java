@@ -11,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Generated
-public class BusLinetinerary {
+public class BusLineItinerary {
 
     @ApiModelProperty(example = "5566")
     private Integer id;
@@ -21,5 +21,6 @@ public class BusLinetinerary {
     @ApiModelProperty(example = "SANTA_MARIA")
     @JsonProperty("nome")
     private String name;
+    @JsonProperty("coordenadas")
     private List<Double[]> coordinates;
 }

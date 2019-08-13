@@ -2,14 +2,20 @@ package br.com.busapi;
 
 import br.com.busapi.contract.v1.lines.models.request.LineRequest;
 import br.com.busapi.contract.v1.lines.models.response.BusLineResponse;
-import br.com.busapi.contract.v1.lines.models.response.BusLinetinerary;
+import br.com.busapi.contract.v1.lines.models.response.BusLineItinerary;
+import br.com.busapi.contract.v1.lines.models.response.ListBusLineResponse;
 import br.com.busapi.impl.lines.models.Line;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mongodb.BasicDBObject;
+import com.mongodb.BasicDBObjectBuilder;
+import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
+import com.mongodb.client.MongoCollection;
 import io.restassured.RestAssured;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.path.json.JsonPath;
+import org.bson.Document;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,6 +23,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.File;
@@ -52,9 +61,18 @@ public class BusapiApplicationTest {
             MongoTemplate mongoTemplate = new MongoTemplate(new MongoClient(ip, port), "test");
             File file = new ClassPathResource("prefill.json").getFile();
 
-            List<Line> lines = new ObjectMapper().readValue(file, new TypeReference<List<Line>>() {
+            List<BusLineItinerary> lines = new ObjectMapper().readValue(file, new TypeReference<List<BusLineItinerary>>() {
             });
-            mongoTemplate.insertAll(lines);
+
+            lines.forEach(line -> {
+                Document document = new Document();
+                document.append("_id", line.getId());
+                document.append("name", line.getName());
+                document.append("code", line.getCode());
+                document.append("coordinates", line.getCoordinates());
+                document.append("_class", "br.com.busapi.impl.lines.models.Line");
+                mongoTemplate.insert(document, "line");
+            });
             first = false;
         }
     }
@@ -299,7 +317,7 @@ public class BusapiApplicationTest {
                 .andReturn()
                     .jsonPath();
 
-        BusLinetinerary response = jsonPath.getObject("$", BusLinetinerary.class);
+        BusLineItinerary response = jsonPath.getObject("$", BusLineItinerary.class);
         assertEquals(lineId, response.getId());
         assertEquals("AGRONOMIA-UFRGS", response.getName());
     }
