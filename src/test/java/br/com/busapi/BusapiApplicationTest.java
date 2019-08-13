@@ -1,17 +1,11 @@
 package br.com.busapi;
 
 import br.com.busapi.contract.v1.lines.models.request.LineRequest;
-import br.com.busapi.contract.v1.lines.models.response.BusLineResponse;
 import br.com.busapi.contract.v1.lines.models.response.BusLineItinerary;
-import br.com.busapi.contract.v1.lines.models.response.ListBusLineResponse;
-import br.com.busapi.impl.lines.models.Line;
+import br.com.busapi.contract.v1.lines.models.response.BusLineResponse;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mongodb.BasicDBObject;
-import com.mongodb.BasicDBObjectBuilder;
-import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
-import com.mongodb.client.MongoCollection;
 import io.restassured.RestAssured;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.path.json.JsonPath;
@@ -23,9 +17,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.File;
@@ -177,7 +168,7 @@ public class BusapiApplicationTest {
                 .thenReturn()
                     .jsonPath();
 
-        Line response = jsonPath.getObject("$", Line.class);
+        BusLineResponse response = jsonPath.getObject("$", BusLineResponse.class);
         assertEquals(lineRequest.getNome(), response.getName());
         assertEquals(lineId, response.getId());
 
@@ -300,7 +291,7 @@ public class BusapiApplicationTest {
                         .andReturn()
                             .jsonPath();
 
-        Line response = jsonPath.getObject("$", Line.class);
+        BusLineResponse response = jsonPath.getObject("$", BusLineResponse.class);
         assertEquals(lineId, response.getId());
     }
 
