@@ -1,0 +1,13 @@
+version: "2"
+services:
+  busapi:
+    image: dschwingel/busapi-config
+    ports:
+      - 8888:8888
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - 27017:27017
+    volumes:
+      - ~/busapi-mongo:/data/db
